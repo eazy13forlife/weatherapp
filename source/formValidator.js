@@ -6,10 +6,12 @@ class FormValidator {
     this.formElement = formElement;
     this.allInputItems = Array.from(allInputItems);
   }
+
   initialize() {
     this.validateLive();
     this.validateOnSubmit();
   }
+  //checks to see if our input fields are valid as we type into them live and provides appropriate message.
   validateLive() {
     this.allInputItems.forEach((input) => {
       input.addEventListener("input", (e) => {
@@ -19,6 +21,8 @@ class FormValidator {
       });
     });
   }
+
+  //checks to see if all our form input fields are valid when we click the submit button and provides appropriate message.
   validateOnSubmit() {
     form.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -33,24 +37,29 @@ class FormValidator {
           input.classList.add("verified");
         }
       });
-      //then we check to see if each of our inputs has this class of verified. If it does, we return true or false. If true, we can submit our form.
-      const goodToGo = this.allInputItems.every((item) =>
-        item.classList.contains("verified")
-      );
-      console.log(goodToGo);
     });
   }
+
+  // returns true if we are actually ready to submit our form because every input field has a verified class. Otherwise, returns false;
+  submitForm() {
+    return this.allInputItems.every((item) =>
+      item.classList.contains("verified")
+    );
+  }
+
   //get the parent element of our input field/
   getParentEl(input) {
     const parentEl = input.parentElement;
     return parentEl;
   }
+
   //get the span error message of our input field;
   getErrorEl(input) {
     const parentEl = input.parentElement;
     const errorMessageEl = parentEl.querySelector("span");
     return errorMessageEl;
   }
+
   //check to see if there is an actual value provided in our text field
   checkValue(input) {
     if (input.value.trim() === "") {
@@ -61,6 +70,7 @@ class FormValidator {
       return true;
     }
   }
+
   //check to see if a valid email is provided in our text feild
   checkEmail(input) {
     if (input.id === "email") {
@@ -78,6 +88,7 @@ class FormValidator {
       }
     }
   }
+
   //check to see if the password is the same as the one before it
   checkPassWordConfirm(input) {
     if (input.id === "password-confirm") {
@@ -97,6 +108,7 @@ class FormValidator {
       }
     }
   }
+
   //runs our success fuction, which means the text field was valid, so we can remove the error messages and the error icon
   runSuccess(input) {
     const errorMessage = this.getErrorEl(input);
@@ -105,6 +117,7 @@ class FormValidator {
       .querySelector("img")
       .setAttribute("style", "display:none");
   }
+
   //runs our error fuction, which means the text field was not valid, so we provide an error message and an error icon
   runError(input, message) {
     const errorMessage = this.getErrorEl(input);
@@ -116,5 +129,14 @@ class FormValidator {
   }
 }
 
-const one = new FormValidator(form, allInputs);
-one.initialize();
+const firstForm = new FormValidator(form, allInputs);
+//initialize the form so the submit event and input event are ready from the start. Event handlers fire in the order in which they were bound.
+firstForm.initialize();
+
+//now, add another submit event on our form, which checks to see if submitForm is true or false. If it's true, we can run our submit code. Otherwise, we can't.
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (firstForm.submitForm()) {
+    // run code if form is valid to submit
+  }
+});
