@@ -1,6 +1,6 @@
-const form = document.querySelector("form");
+const firstForm = document.querySelector("form");
 const allInputs = document.querySelectorAll("input");
-console.log(allInputs);
+
 class FormValidator {
   constructor(formElement, allInputItems) {
     this.formElement = formElement;
