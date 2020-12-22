@@ -15721,10 +15721,84 @@ module.exports = g;
 "use strict";
 
 
-var mike = {
-  dog: "yes",
-  mike: "np"
-};
+var _requests = __webpack_require__(/*! ./requests.js */ "./source/requests.js");
+
+var _requests2 = _interopRequireDefault(_requests);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+(0, _requests2.default)("seattle", "imperial").then(function (weather) {
+  console.log(weather);
+});
+
+/***/ }),
+
+/***/ "./source/requests.js":
+/*!****************************!*\
+  !*** ./source/requests.js ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+var getWeatherByCity = function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(cityName, unit) {
+    var responseObject, object;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return fetch("https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=ef2e9d5820aa333383eb82d5350f8a6a&units=" + unit);
+
+          case 2:
+            responseObject = _context.sent;
+
+            if (!responseObject.ok) {
+              _context.next = 11;
+              break;
+            }
+
+            _context.next = 6;
+            return responseObject.json();
+
+          case 6:
+            object = _context.sent;
+
+            console.log(object);
+            return _context.abrupt("return", {
+              temp: Math.floor(object.main.temp),
+              feels_like: Math.floor(object.main.feels_like),
+              humidity: Math.floor(object.main.humidity),
+              wind: Math.floor(object.wind.speed),
+              cloudy_percentage: Math.floor(object.clouds.all)
+            });
+
+          case 11:
+            throw new Error("City not found");
+
+          case 12:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, undefined);
+  }));
+
+  return function getWeatherByCity(_x, _x2) {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+exports.default = getWeatherByCity;
 
 /***/ }),
 
