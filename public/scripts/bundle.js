@@ -15748,7 +15748,7 @@ var _requests2 = _interopRequireDefault(_requests);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-(0, _requests2.default)("seattle", "imperial").then(function (weather) {
+(0, _requests2.default)("brussels", "imperial").then(function (weather) {
   console.log(weather);
 });
 
@@ -15774,9 +15774,10 @@ var _configkeys = __webpack_require__(/*! ./configkeys.js */ "./source/configkey
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
+//async function to get the weather details for a specific city
 var getWeatherByCity = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(cityName, unit) {
-    var responseObject, object, locationName;
+    var responseObject, object, fullLocation;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -15801,14 +15802,14 @@ var getWeatherByCity = function () {
             return getState(cityName);
 
           case 9:
-            locationName = _context.sent;
+            fullLocation = _context.sent;
             return _context.abrupt("return", _extends({
               temp: Math.floor(object.main.temp),
               feels_like: Math.floor(object.main.feels_like),
               humidity: Math.floor(object.main.humidity),
               wind: Math.floor(object.wind.speed),
               cloudy_percentage: Math.floor(object.clouds.all)
-            }, locationName));
+            }, fullLocation));
 
           case 13:
             throw new Error("City not found");
@@ -15826,9 +15827,10 @@ var getWeatherByCity = function () {
   };
 }();
 
+//async function to get city, state,and counry for a speicific city
 var getState = function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(cityName) {
-    var responseObject, objectData, addressObject;
+    var responseObject, objectData, city, state, country;
     return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
@@ -15840,7 +15842,7 @@ var getState = function () {
             responseObject = _context2.sent;
 
             if (!responseObject.ok) {
-              _context2.next = 15;
+              _context2.next = 17;
               break;
             }
 
@@ -15849,32 +15851,34 @@ var getState = function () {
 
           case 6:
             objectData = _context2.sent;
-            addressObject = objectData.Response.View[0].Result[0].Location.Address;
+            city = objectData.Response.View[0].Result[0].Location.Address.City;
+            state = objectData.Response.View[0].Result[0].Location.Address.AdditionalData[1].value;
+            country = objectData.Response.View[0].Result[0].Location.Address.AdditionalData[0].value;
 
-            if (!(addressObject.Country === "USA")) {
-              _context2.next = 12;
+            if (!(country === "United States")) {
+              _context2.next = 14;
               break;
             }
 
             return _context2.abrupt("return", {
-              city: addressObject.City,
-              State: addressObject.State
+              city: city,
+              State: state
             });
 
-          case 12:
+          case 14:
             return _context2.abrupt("return", {
-              city: addressObject.City,
-              State: addressObject.Country
+              city: city,
+              State: country
             });
-
-          case 13:
-            _context2.next = 16;
-            break;
 
           case 15:
+            _context2.next = 18;
+            break;
+
+          case 17:
             throw new Error("Location not found");
 
-          case 16:
+          case 18:
           case "end":
             return _context2.stop();
         }
