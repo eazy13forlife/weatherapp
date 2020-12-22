@@ -5,6 +5,7 @@ const getWeatherByCity = async (cityName, unit) => {
   const responseObject = await fetch(
     `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${weatherKey}&units=${unit}`
   );
+  console.log(responseObject);
   if (responseObject.ok) {
     const object = await responseObject.json();
     const fullLocation = await getState(cityName);
@@ -33,6 +34,7 @@ const getState = async (cityName) => {
   );
   if (responseObject.ok) {
     const objectData = await responseObject.json();
+    console.log(objectData);
     const city = objectData.Response.View[0].Result[0].Location.Address.City;
     const state =
       objectData.Response.View[0].Result[0].Location.Address.AdditionalData[1]
@@ -41,6 +43,9 @@ const getState = async (cityName) => {
       objectData.Response.View[0].Result[0].Location.Address.AdditionalData[0]
         .value;
     if (country === "United States") {
+      if (!city) {
+        throw new Error("City not found");
+      }
       return {
         city: city,
         state: state,
@@ -52,7 +57,7 @@ const getState = async (cityName) => {
       };
     }
   } else {
-    throw new Error("Location not found");
+    throw new Error("City not found");
   }
 };
 

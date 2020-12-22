@@ -37462,6 +37462,14 @@ var displayBackground = function () {
     return _ref2.apply(this, arguments);
   };
 }();
+
+var handleErrors = function handleErrors(functions) {
+  return function () {
+    return functions.catch(function (error) {
+      console.log(error);
+    });
+  };
+};
 exports.cloudValue = cloudValue;
 exports.displayBackground = displayBackground;
 
@@ -37496,10 +37504,11 @@ sunset or maybe 30 minutes afterwill show night image;
 
 var searchCityEl = document.querySelector("#search_city");
 var cityString = "";
+
 searchCityEl.addEventListener("input", function (e) {
   var value = e.target.value;
   cityString = "";
-  cityString = cityString + value;
+  cityString = value;
   console.log(cityString);
 });
 searchCityEl.addEventListener("keypress", function (e) {
@@ -37544,20 +37553,22 @@ var getWeatherByCity = function () {
           case 2:
             responseObject = _context.sent;
 
+            console.log(responseObject);
+
             if (!responseObject.ok) {
-              _context.next = 14;
+              _context.next = 15;
               break;
             }
 
-            _context.next = 6;
+            _context.next = 7;
             return responseObject.json();
 
-          case 6:
+          case 7:
             object = _context.sent;
-            _context.next = 9;
+            _context.next = 10;
             return getState(cityName);
 
-          case 9:
+          case 10:
             fullLocation = _context.sent;
 
             console.log(object);
@@ -37573,10 +37584,10 @@ var getWeatherByCity = function () {
               cloudy_percentage: Math.floor(object.clouds.all)
             }, fullLocation));
 
-          case 14:
+          case 15:
             throw new Error("City not found");
 
-          case 15:
+          case 16:
           case "end":
             return _context.stop();
         }
@@ -37604,7 +37615,7 @@ var getState = function () {
             responseObject = _context2.sent;
 
             if (!responseObject.ok) {
-              _context2.next = 17;
+              _context2.next = 20;
               break;
             }
 
@@ -37613,34 +37624,44 @@ var getState = function () {
 
           case 6:
             objectData = _context2.sent;
+
+            console.log(objectData);
             city = objectData.Response.View[0].Result[0].Location.Address.City;
             state = objectData.Response.View[0].Result[0].Location.Address.AdditionalData[1].value;
             country = objectData.Response.View[0].Result[0].Location.Address.AdditionalData[0].value;
 
             if (!(country === "United States")) {
+              _context2.next = 17;
+              break;
+            }
+
+            if (city) {
               _context2.next = 14;
               break;
             }
 
+            throw new Error("City not found");
+
+          case 14:
             return _context2.abrupt("return", {
               city: city,
               state: state
             });
 
-          case 14:
+          case 17:
             return _context2.abrupt("return", {
               city: city,
               state: country
             });
 
-          case 15:
-            _context2.next = 18;
+          case 18:
+            _context2.next = 21;
             break;
 
-          case 17:
-            throw new Error("Location not found");
+          case 20:
+            throw new Error("City not found");
 
-          case 18:
+          case 21:
           case "end":
             return _context2.stop();
         }
@@ -37724,7 +37745,7 @@ var enterSearch = function () {
               feelsLikeEl.innerHTML = "Feels like: " + object.feels_like + " &#8451";
               windEl.textContent = "Wind: " + object.wind + " M/S";
             }
-            humidityEl.textContent = "Humidity: " + object.humidity + " %";
+            humidityEl.textContent = "Humidity: " + object.humidity + "%";
 
           case 9:
           case "end":

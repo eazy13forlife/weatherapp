@@ -12,10 +12,11 @@ sunset or maybe 30 minutes afterwill show night image;
 
 const searchCityEl = document.querySelector("#search_city");
 let cityString = "";
+
 searchCityEl.addEventListener("input", (e) => {
   const value = e.target.value;
   cityString = "";
-  cityString = cityString + value;
+  cityString = value;
   console.log(cityString);
 });
 searchCityEl.addEventListener("keypress", (e) => {

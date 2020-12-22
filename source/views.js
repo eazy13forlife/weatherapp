@@ -23,7 +23,7 @@ const enterSearch = async (cityName, unit) => {
     feelsLikeEl.innerHTML = `Feels like: ${object.feels_like} &#8451`;
     windEl.textContent = `Wind: ${object.wind} M/S`;
   }
-  humidityEl.textContent = `Humidity: ${object.humidity} %`;
+  humidityEl.textContent = `Humidity: ${object.humidity}%`;
 };
 
 export { bodyEl, enterSearch };

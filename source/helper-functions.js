@@ -31,4 +31,12 @@ const displayBackground = async (cityName, unit) => {
     bodyEl.setAttribute("style", "background-image:");
   }
 };
+
+const handleErrors = (functions) => {
+  return () => {
+    return functions.catch((error) => {
+      console.log(error);
+    });
+  };
+};
 export { cloudValue, displayBackground };
