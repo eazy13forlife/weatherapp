@@ -15711,6 +15711,27 @@ module.exports = g;
 
 /***/ }),
 
+/***/ "./source/configkeys.js":
+/*!******************************!*\
+  !*** ./source/configkeys.js ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var weatherKey = "ef2e9d5820aa333383eb82d5350f8a6a";
+var geocoderKey = "oKRWWq6gz9i4SFDpOnmNggTTzSCqbjUPQhGQbAZsI08";
+
+exports.weatherKey = weatherKey;
+exports.geocoderKey = geocoderKey;
+
+/***/ }),
+
 /***/ "./source/index.js":
 /*!*************************!*\
   !*** ./source/index.js ***!
@@ -15747,23 +15768,27 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _configkeys = __webpack_require__(/*! ./configkeys.js */ "./source/configkeys.js");
+
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 var getWeatherByCity = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(cityName, unit) {
-    var responseObject, object;
+    var responseObject, object, locationName;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return fetch("https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=ef2e9d5820aa333383eb82d5350f8a6a&units=" + unit);
+            return fetch("https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + _configkeys.weatherKey + "&units=" + unit);
 
           case 2:
             responseObject = _context.sent;
 
             if (!responseObject.ok) {
-              _context.next = 11;
+              _context.next = 13;
               break;
             }
 
@@ -15772,20 +15797,23 @@ var getWeatherByCity = function () {
 
           case 6:
             object = _context.sent;
+            _context.next = 9;
+            return getState(cityName);
 
-            console.log(object);
-            return _context.abrupt("return", {
+          case 9:
+            locationName = _context.sent;
+            return _context.abrupt("return", _extends({
               temp: Math.floor(object.main.temp),
               feels_like: Math.floor(object.main.feels_like),
               humidity: Math.floor(object.main.humidity),
               wind: Math.floor(object.wind.speed),
               cloudy_percentage: Math.floor(object.clouds.all)
-            });
+            }, locationName));
 
-          case 11:
+          case 13:
             throw new Error("City not found");
 
-          case 12:
+          case 14:
           case "end":
             return _context.stop();
         }
@@ -15798,6 +15826,66 @@ var getWeatherByCity = function () {
   };
 }();
 
+var getState = function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(cityName) {
+    var responseObject, objectData, addressObject;
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.next = 2;
+            return fetch("https://geocoder.ls.hereapi.com/6.2/geocode.json?apiKey=" + _configkeys.geocoderKey + "&searchtext=" + cityName);
+
+          case 2:
+            responseObject = _context2.sent;
+
+            if (!responseObject.ok) {
+              _context2.next = 15;
+              break;
+            }
+
+            _context2.next = 6;
+            return responseObject.json();
+
+          case 6:
+            objectData = _context2.sent;
+            addressObject = objectData.Response.View[0].Result[0].Location.Address;
+
+            if (!(addressObject.Country === "USA")) {
+              _context2.next = 12;
+              break;
+            }
+
+            return _context2.abrupt("return", {
+              city: addressObject.City,
+              State: addressObject.State
+            });
+
+          case 12:
+            return _context2.abrupt("return", {
+              city: addressObject.City,
+              State: addressObject.Country
+            });
+
+          case 13:
+            _context2.next = 16;
+            break;
+
+          case 15:
+            throw new Error("Location not found");
+
+          case 16:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, undefined);
+  }));
+
+  return function getState(_x3) {
+    return _ref2.apply(this, arguments);
+  };
+}();
 exports.default = getWeatherByCity;
 
 /***/ }),
