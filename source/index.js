@@ -1,5 +1,5 @@
 import getWeatherByCity from "./requests.js";
-import { enterSearch } from "./views.js";
+import { renderWeather } from "./views.js";
 
 /**
 clear at night is shining moon
@@ -13,14 +13,15 @@ sunset or maybe 30 minutes afterwill show night image;
 const searchCityEl = document.querySelector("#search_city");
 let cityString = "";
 
+//when we type in the search bar, the value of cityString changes
 searchCityEl.addEventListener("input", (e) => {
-  const value = e.target.value;
   cityString = "";
-  cityString = value;
-  console.log(cityString);
+  cityString = e.target.value;
 });
+
+//when we press enter in search bar, we call renderWeather with the value of cityString.
 searchCityEl.addEventListener("keypress", (e) => {
   if (e.charCode === 13) {
-    enterSearch(cityString, "imperial");
+    renderWeather(cityString, "imperial");
   }
 });

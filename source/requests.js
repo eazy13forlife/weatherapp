@@ -5,11 +5,9 @@ const getWeatherByCity = async (cityName, unit) => {
   const responseObject = await fetch(
     `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${weatherKey}&units=${unit}`
   );
-  console.log(responseObject);
   if (responseObject.ok) {
     const object = await responseObject.json();
     const fullLocation = await getState(cityName);
-    console.log(object);
     return {
       // multiply by 1000 because moment works in ms, but this api works in seconds, and we want to use moment
       timezone: object.timezone * 1000,
@@ -34,7 +32,6 @@ const getState = async (cityName) => {
   );
   if (responseObject.ok) {
     const objectData = await responseObject.json();
-    console.log(objectData);
     const city = objectData.Response.View[0].Result[0].Location.Address.City;
     const state =
       objectData.Response.View[0].Result[0].Location.Address.AdditionalData[1]

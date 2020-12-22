@@ -37505,15 +37505,16 @@ sunset or maybe 30 minutes afterwill show night image;
 var searchCityEl = document.querySelector("#search_city");
 var cityString = "";
 
+//when we type in the search bar, the value of cityString changes
 searchCityEl.addEventListener("input", function (e) {
-  var value = e.target.value;
   cityString = "";
-  cityString = value;
-  console.log(cityString);
+  cityString = e.target.value;
 });
+
+//when we press enter in search bar, we call renderWeather with the value of cityString.
 searchCityEl.addEventListener("keypress", function (e) {
   if (e.charCode === 13) {
-    (0, _views.enterSearch)(cityString, "imperial");
+    (0, _views.renderWeather)(cityString, "imperial");
   }
 });
 
@@ -37553,25 +37554,21 @@ var getWeatherByCity = function () {
           case 2:
             responseObject = _context.sent;
 
-            console.log(responseObject);
-
             if (!responseObject.ok) {
-              _context.next = 15;
+              _context.next = 13;
               break;
             }
 
-            _context.next = 7;
+            _context.next = 6;
             return responseObject.json();
 
-          case 7:
+          case 6:
             object = _context.sent;
-            _context.next = 10;
+            _context.next = 9;
             return getState(cityName);
 
-          case 10:
+          case 9:
             fullLocation = _context.sent;
-
-            console.log(object);
             return _context.abrupt("return", _extends({
               // multiply by 1000 because moment works in ms, but this api works in seconds, and we want to use moment
               timezone: object.timezone * 1000,
@@ -37584,10 +37581,10 @@ var getWeatherByCity = function () {
               cloudy_percentage: Math.floor(object.clouds.all)
             }, fullLocation));
 
-          case 15:
+          case 13:
             throw new Error("City not found");
 
-          case 16:
+          case 14:
           case "end":
             return _context.stop();
         }
@@ -37615,7 +37612,7 @@ var getState = function () {
             responseObject = _context2.sent;
 
             if (!responseObject.ok) {
-              _context2.next = 20;
+              _context2.next = 19;
               break;
             }
 
@@ -37624,44 +37621,42 @@ var getState = function () {
 
           case 6:
             objectData = _context2.sent;
-
-            console.log(objectData);
             city = objectData.Response.View[0].Result[0].Location.Address.City;
             state = objectData.Response.View[0].Result[0].Location.Address.AdditionalData[1].value;
             country = objectData.Response.View[0].Result[0].Location.Address.AdditionalData[0].value;
 
             if (!(country === "United States")) {
-              _context2.next = 17;
+              _context2.next = 16;
               break;
             }
 
             if (city) {
-              _context2.next = 14;
+              _context2.next = 13;
               break;
             }
 
             throw new Error("City not found");
 
-          case 14:
+          case 13:
             return _context2.abrupt("return", {
               city: city,
               state: state
             });
 
-          case 17:
+          case 16:
             return _context2.abrupt("return", {
               city: city,
               state: country
             });
 
-          case 18:
-            _context2.next = 21;
+          case 17:
+            _context2.next = 20;
             break;
 
-          case 20:
+          case 19:
             throw new Error("City not found");
 
-          case 21:
+          case 20:
           case "end":
             return _context2.stop();
         }
@@ -37692,7 +37687,7 @@ exports.default = getWeatherByCity;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.enterSearch = exports.bodyEl = undefined;
+exports.renderWeather = exports.bodyEl = undefined;
 
 var _moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 
@@ -37716,7 +37711,8 @@ var humidityEl = document.querySelector("#humidity");
 var bodyEl = document.querySelector("body");
 var degrees = document.querySelector("#degrees");
 
-var enterSearch = function () {
+//function that renders all the weather content to the screen;
+var renderWeather = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(cityName, unit) {
     var object;
     return regeneratorRuntime.wrap(function _callee$(_context) {
@@ -37755,13 +37751,13 @@ var enterSearch = function () {
     }, _callee, undefined);
   }));
 
-  return function enterSearch(_x, _x2) {
+  return function renderWeather(_x, _x2) {
     return _ref.apply(this, arguments);
   };
 }();
 
 exports.bodyEl = bodyEl;
-exports.enterSearch = enterSearch;
+exports.renderWeather = renderWeather;
 
 /***/ }),
 

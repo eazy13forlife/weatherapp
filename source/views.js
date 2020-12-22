@@ -10,7 +10,8 @@ const humidityEl = document.querySelector("#humidity");
 const bodyEl = document.querySelector("body");
 const degrees = document.querySelector("#degrees");
 
-const enterSearch = async (cityName, unit) => {
+//function that renders all the weather content to the screen;
+const renderWeather = async (cityName, unit) => {
   const object = await getWeatherByCity(cityName, unit);
   cityNameEl.textContent = `${object.city}, ${object.state}`;
   cloudyEl.textContent = await cloudValue(cityName);
@@ -26,4 +27,4 @@ const enterSearch = async (cityName, unit) => {
   humidityEl.textContent = `Humidity: ${object.humidity}%`;
 };
 
-export { bodyEl, enterSearch };
+export { bodyEl, renderWeather };
