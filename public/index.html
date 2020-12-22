@@ -4,19 +4,37 @@
     <title>Weather App</title>
     <meta name="description" content="This is a worldwide weather app" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta charset="utf-8"/>
-    <link href="./styles/index.css" rel="stylesheet"/>
+    <meta charset="utf-8" />
+    <link href="./styles/index.css" rel="stylesheet" />
   </head>
-
-
-
-
-
-
-
-
-
-
+  <body>
+    <header>
+      <input
+        type="text"
+        name="search city"
+        id="search_city"
+        placeholder="Search city"
+        <
+      />
+    </header>
+    <main>
+      <div class="weather-container">
+        <div class="city-state">
+          <h1 id="name"></h1>
+          <p id="cloudy"></p>
+        </div>
+        <div class="weather-details">
+          <div class="weather">
+            <p id="degrees"></p>
+          </div>
+          <div class="details">
+            <p id="feels_like"></p>
+            <p id="wind"></p>
+            <p id="humidity"></p>
+          </div>
+        </div>
+      </div>
+    </main>
     <script src="./scripts/bundle.js"></script>
   </body>
 </html>

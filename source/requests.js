@@ -8,7 +8,12 @@ const getWeatherByCity = async (cityName, unit) => {
   if (responseObject.ok) {
     const object = await responseObject.json();
     const fullLocation = await getState(cityName);
+    console.log(object);
     return {
+      // multiply by 1000 because moment works in ms, but this api works in seconds, and we want to use moment
+      timezone: object.timezone * 1000,
+      sunrise: object.sys.sunrise * 1000,
+      sunset: object.sys.sunset * 1000,
       temp: Math.floor(object.main.temp),
       feels_like: Math.floor(object.main.feels_like),
       humidity: Math.floor(object.main.humidity),
@@ -21,7 +26,7 @@ const getWeatherByCity = async (cityName, unit) => {
   }
 };
 
-//async function to get city, state,and counry for a speicific city
+//async function to get city, state,and counry for a specific city
 const getState = async (cityName) => {
   const responseObject = await fetch(
     `https://geocoder.ls.hereapi.com/6.2/geocode.json?apiKey=${geocoderKey}&searchtext=${cityName}`
@@ -38,16 +43,18 @@ const getState = async (cityName) => {
     if (country === "United States") {
       return {
         city: city,
-        State: state,
+        state: state,
       };
     } else {
       return {
         city: city,
-        State: country,
+        state: country,
       };
     }
   } else {
     throw new Error("Location not found");
   }
 };
+
+// const mike = moment().utc().valueOf();
 export default getWeatherByCity;
