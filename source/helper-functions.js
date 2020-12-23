@@ -2,6 +2,7 @@ import moment from "moment";
 import { bodyEl } from "./views.js";
 import getWeatherByCity from "./requests.js";
 
+//function that tells us cloud value based on cloudy percentage
 const cloudValue = async (cityName, unit) => {
   const object = await getWeatherByCity(cityName, unit);
   const percent = object.cloudy_percentage;
@@ -18,6 +19,7 @@ const cloudValue = async (cityName, unit) => {
   }
 };
 
+//function that displays the body background we want based on sunset/sunsrise
 const displayBackground = async (cityName, unit) => {
   const object = await getWeatherByCity(cityName, unit);
   const sunrise = object.sunrise;
@@ -32,10 +34,10 @@ const displayBackground = async (cityName, unit) => {
   }
 };
 
-const handleErrors = (functions) => {
-  return () => {
-    return functions.catch((error) => {
-      console.log(error);
+const handleErrors = (singleFunction) => {
+  return (cityName, unit) => {
+    return singleFunction(cityName, unit).catch((error) => {
+      console.log("city not found");
     });
   };
 };

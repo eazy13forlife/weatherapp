@@ -37365,6 +37365,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
+//function that tells us cloud value based on cloudy percentage
 var cloudValue = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(cityName, unit) {
     var object, percent;
@@ -37426,6 +37427,7 @@ var cloudValue = function () {
   };
 }();
 
+//function that displays the body background we want based on sunset/sunsrise
 var displayBackground = function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(cityName, unit) {
     var object, sunrise, sunset, universalTime;
@@ -37463,10 +37465,10 @@ var displayBackground = function () {
   };
 }();
 
-var handleErrors = function handleErrors(functions) {
-  return function () {
-    return functions.catch(function (error) {
-      console.log(error);
+var handleErrors = function handleErrors(singleFunction) {
+  return function (cityName, unit) {
+    return singleFunction(cityName, unit).catch(function (error) {
+      console.log("city not found");
     });
   };
 };
@@ -37719,17 +37721,18 @@ var renderWeather = function () {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _context.next = 2;
+            _context.prev = 0;
+            _context.next = 3;
             return (0, _requests2.default)(cityName, unit);
 
-          case 2:
+          case 3:
             object = _context.sent;
 
             cityNameEl.textContent = object.city + ", " + object.state;
-            _context.next = 6;
+            _context.next = 7;
             return (0, _helperFunctions.cloudValue)(cityName);
 
-          case 6:
+          case 7:
             cloudyEl.textContent = _context.sent;
 
             if (unit === "imperial") {
@@ -37742,13 +37745,21 @@ var renderWeather = function () {
               windEl.textContent = "Wind: " + object.wind + " M/S";
             }
             humidityEl.textContent = "Humidity: " + object.humidity + "%";
+            _context.next = 15;
+            break;
 
-          case 9:
+          case 12:
+            _context.prev = 12;
+            _context.t0 = _context["catch"](0);
+
+            console.log("City not found");
+
+          case 15:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, undefined);
+    }, _callee, undefined, [[0, 12]]);
   }));
 
   return function renderWeather(_x, _x2) {
