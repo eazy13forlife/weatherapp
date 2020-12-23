@@ -18,3 +18,87 @@ ul {
   margin: 0px;
   padding: 0px;
 }
+/*beginning of search bar and header*/
+header {
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 2rem;
+  position: relative;
+}
+body {
+  background-image: url("../images/clear-skies.jpg");
+  background-size: 100%;
+}
+#search_city {
+  margin-top: 2rem;
+  margin-right: 4rem;
+  padding: 0.7em;
+  padding-left: 1em;
+  padding-right: 3em;
+  border-radius: 20px;
+  width: 220px;
+  font-size: 1.2rem;
+  background: none;
+  border: 1px solid white;
+  color: white;
+}
+input::placeholder {
+  color: white;
+}
+#search_city:focus {
+  outline: 0;
+}
+#search_icon {
+  font-size: 1.4em;
+  color: white;
+  position: absolute;
+  top: 1.9em;
+  right: 3.5em;
+}
+#search_icon:hover {
+  color: blue;
+}
+/*end of search bar and header*/
+
+/*beginnning of weather container*/
+div.weather-container {
+  width: 50%;
+  margin-left: 6em;
+  margin-top: 2em;
+}
+#cloudy {
+  font-size: 1.4rem;
+}
+#name {
+  font-size: 2.5rem;
+}
+div.weather-details {
+  display: flex;
+  flex-direction: row;
+  margin-top: 1.6em;
+  font-size: 1.3rem;
+}
+div.weather {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 4rem;
+}
+div.details {
+  margin-left: 1.5em;
+  border-left: 1px solid black;
+  padding-left: 1.5em;
+}
+div.details.remove-border {
+  border-left: none;
+}
+div.details p {
+  margin-bottom: 0.5em;
+}
+span {
+  margin-left: 6em;
+  margin-top: 2em;
+  display: none;
+  font-size: 2.3rem;
+}
+/*end of weather container*/

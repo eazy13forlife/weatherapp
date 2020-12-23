@@ -18,7 +18,17 @@ const cloudValue = async (cityName, unit) => {
     return "Sunny";
   }
 };
-
+/*
+daytime background pic
+body {
+background-image: url("../images/clear-skies.jpg");
+background-size: 150%;
+}
+body {
+  background-image: url("../images/patrick-fore-HVFYFns30-I-unsplash.jpg");
+  background-size: 100%;
+}
+*/
 //function that displays the body background we want based on sunset/sunsrise
 const displayBackground = async (cityName, unit) => {
   const object = await getWeatherByCity(cityName, unit);
@@ -27,10 +37,10 @@ const displayBackground = async (cityName, unit) => {
   const universalTime = moment.utc().valueOf();
   //if the time is less than the citys sunset time but greater than the citys sunrise time, show sun because the sun is still up.
   if (universalTime >= sunrise && universalTime <= sunset) {
-    bodyEl.setAttribute("style", "background-image:");
+    bodyEl.setAttribute("style", `background-image:${nightSky}`);
     // show dark image
   } else if (universalTime >= sunset && universalTime <= sunrise) {
-    bodyEl.setAttribute("style", "background-image:");
+    bodyEl.setAttribute("style", `background-image:${daySky}`);
   }
 };
 

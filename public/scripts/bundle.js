@@ -37426,7 +37426,17 @@ var cloudValue = function () {
     return _ref.apply(this, arguments);
   };
 }();
-
+/*
+daytime background pic
+body {
+background-image: url("../images/clear-skies.jpg");
+background-size: 150%;
+}
+body {
+  background-image: url("../images/patrick-fore-HVFYFns30-I-unsplash.jpg");
+  background-size: 100%;
+}
+*/
 //function that displays the body background we want based on sunset/sunsrise
 var displayBackground = function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(cityName, unit) {
@@ -37446,10 +37456,10 @@ var displayBackground = function () {
             //if the time is less than the citys sunset time but greater than the citys sunrise time, show sun because the sun is still up.
 
             if (universalTime >= sunrise && universalTime <= sunset) {
-              _views.bodyEl.setAttribute("style", "background-image:");
+              _views.bodyEl.setAttribute("style", "background-image:" + nightSky);
               // show dark image
             } else if (universalTime >= sunset && universalTime <= sunrise) {
-              _views.bodyEl.setAttribute("style", "background-image:");
+              _views.bodyEl.setAttribute("style", "background-image:" + daySky);
             }
 
           case 7:
@@ -37493,6 +37503,10 @@ var _requests2 = _interopRequireDefault(_requests);
 
 var _views = __webpack_require__(/*! ./views.js */ "./source/views.js");
 
+var _moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+
+var _moment2 = _interopRequireDefault(_moment);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -37504,7 +37518,11 @@ sunrise or maybe 30 minutes after will show sun image;
 sunset or maybe 30 minutes afterwill show night image;
 **/
 
+//for some reason the border to the left of the details div shows at page load, so I added a class that remooves this border on page load. We will add this border back into renderweather function instead.
+_views.detailsDiv.classList.add("remove-border");
+
 var searchCityEl = document.querySelector("#search_city");
+var searchIcon = document.querySelector("#search_icon");
 var cityString = "";
 
 //when we type in the search bar, the value of cityString changes
@@ -37515,10 +37533,19 @@ searchCityEl.addEventListener("input", function (e) {
 
 //when we press enter in search bar, we call renderWeather with the value of cityString.
 searchCityEl.addEventListener("keypress", function (e) {
-  if (e.charCode === 13) {
+  if (e.charCode === 13 && cityString.trim() !== "") {
     (0, _views.renderWeather)(cityString, "imperial");
   }
 });
+//when we click search icon, we call renderWeather with the value of cityString.
+searchIcon.addEventListener("click", function (e) {
+  if (cityString.trim() !== "") {
+    (0, _views.renderWeather)(cityString, "imperial");
+  }
+});
+var currentTime = (0, _moment2.default)().valueOf();
+var sam = (0, _moment2.default)(1608703376566).utc().format("dddd, MMMM Do YYYY, h:mm:ss a");
+console.log(sam);
 
 /***/ }),
 
@@ -37689,7 +37716,7 @@ exports.default = getWeatherByCity;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.renderWeather = exports.bodyEl = undefined;
+exports.detailsDiv = exports.renderWeather = exports.bodyEl = undefined;
 
 var _moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 
@@ -37711,7 +37738,10 @@ var feelsLikeEl = document.querySelector("#feels_like");
 var windEl = document.querySelector("#wind");
 var humidityEl = document.querySelector("#humidity");
 var bodyEl = document.querySelector("body");
+var weatherContainerEl = document.querySelector(".weather-container");
 var degrees = document.querySelector("#degrees");
+var spanEl = document.querySelector("span");
+var detailsDiv = document.querySelector(".details");
 
 //function that renders all the weather content to the screen;
 var renderWeather = function () {
@@ -37722,19 +37752,24 @@ var renderWeather = function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-            _context.next = 3;
+
+            spanEl.setAttribute("style", "display:none");
+            weatherContainerEl.setAttribute("style", "display:block");
+            _context.next = 5;
             return (0, _requests2.default)(cityName, unit);
 
-          case 3:
+          case 5:
             object = _context.sent;
 
             cityNameEl.textContent = object.city + ", " + object.state;
-            _context.next = 7;
+            _context.next = 9;
             return (0, _helperFunctions.cloudValue)(cityName);
 
-          case 7:
+          case 9:
             cloudyEl.textContent = _context.sent;
 
+            //right after some text has shown on the screen but before the details div shows, remove the remove-border class so our border can show again.
+            detailsDiv.classList.remove("remove-border");
             if (unit === "imperial") {
               degrees.innerHTML = object.temp + "&#8457";
               feelsLikeEl.innerHTML = "Feels like: " + object.feels_like + "&#8457";
@@ -37745,21 +37780,22 @@ var renderWeather = function () {
               windEl.textContent = "Wind: " + object.wind + " M/S";
             }
             humidityEl.textContent = "Humidity: " + object.humidity + "%";
-            _context.next = 15;
+            _context.next = 19;
             break;
 
-          case 12:
-            _context.prev = 12;
+          case 15:
+            _context.prev = 15;
             _context.t0 = _context["catch"](0);
 
-            console.log("City not found");
+            weatherContainerEl.setAttribute("style", "display:none");
+            spanEl.setAttribute("style", "display:block");
 
-          case 15:
+          case 19:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, undefined, [[0, 12]]);
+    }, _callee, undefined, [[0, 15]]);
   }));
 
   return function renderWeather(_x, _x2) {
@@ -37769,6 +37805,7 @@ var renderWeather = function () {
 
 exports.bodyEl = bodyEl;
 exports.renderWeather = renderWeather;
+exports.detailsDiv = detailsDiv;
 
 /***/ }),
 

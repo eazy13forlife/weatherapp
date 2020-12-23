@@ -33,6 +33,10 @@
     "eslint-plugin-prettier": "^3.2.0",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.0.0",
-    "prettier": "2.2.1"
+    "file": "^0.2.2",
+    "file-loader": "^6.2.0",
+    "loader": "^2.1.1",
+    "prettier": "2.2.1",
+    "url-loader": "^4.1.1"
   }
 }

@@ -1,6 +1,6 @@
 import getWeatherByCity from "./requests.js";
-import { renderWeather } from "./views.js";
-
+import { renderWeather, detailsDiv } from "./views.js";
+import moment from "moment";
 /**
 clear at night is shining moon
 clear when its sunny is sunny
@@ -10,7 +10,11 @@ sunrise or maybe 30 minutes after will show sun image;
 sunset or maybe 30 minutes afterwill show night image;
 **/
 
+//for some reason the border to the left of the details div shows at page load, so I added a class that remooves this border on page load. We will add this border back into renderweather function instead.
+detailsDiv.classList.add("remove-border");
+
 const searchCityEl = document.querySelector("#search_city");
+const searchIcon = document.querySelector("#search_icon");
 let cityString = "";
 
 //when we type in the search bar, the value of cityString changes
@@ -21,7 +25,16 @@ searchCityEl.addEventListener("input", (e) => {
 
 //when we press enter in search bar, we call renderWeather with the value of cityString.
 searchCityEl.addEventListener("keypress", (e) => {
-  if (e.charCode === 13) {
+  if (e.charCode === 13 && cityString.trim() !== "") {
     renderWeather(cityString, "imperial");
   }
 });
+//when we click search icon, we call renderWeather with the value of cityString.
+searchIcon.addEventListener("click", (e) => {
+  if (cityString.trim() !== "") {
+    renderWeather(cityString, "imperial");
+  }
+});
+const currentTime = moment().valueOf();
+const sam = moment(1608703376566).utc().format("dddd, MMMM Do YYYY, h:mm:ss a");
+console.log(sam);

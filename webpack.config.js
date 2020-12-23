@@ -11,13 +11,27 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: ["env"],
-            plugins: ["transform-object-rest-spread"],
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              presets: ["env"],
+              plugins: ["transform-object-rest-spread"],
+            },
           },
-        },
+        ],
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              limit: 8000,
+              name: "../../public/scripts/[name].[ext]",
+            },
+          },
+        ],
       },
     ],
   },
