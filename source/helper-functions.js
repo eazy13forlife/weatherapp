@@ -1,5 +1,5 @@
 import moment from "moment";
-import { bodyEl } from "./views.js";
+import { bodyEl, weatherContainerEl } from "./views.js";
 import getWeatherByCity from "./requests.js";
 import nightSky from "./background-images/clearnight.jpg";
 import daySky from "./background-images/clearskies.jpg";
@@ -34,7 +34,6 @@ body {
 //function that displays the body background we want based on sunset/sunsrise
 const displayBackground = async (cityName, unit) => {
   const object = await getWeatherByCity(cityName, unit);
-  console.log(object);
   const sunrise = moment(object.sunrise + object.timezone)
     .utc()
     .toString();
@@ -42,19 +41,20 @@ const displayBackground = async (cityName, unit) => {
     .utc()
     .toString();
   const universalTime = moment.utc().add(object.timezone).toString();
-  console.log(universalTime);
-  console.log(sunrise);
-  console.log(sunset);
   //if the time is less than the citys sunset time but greater than the citys sunrise time, show sun because the sun is still up.
   if (universalTime <= sunrise) {
-    console.log("hey");
-    bodyEl.setAttribute("style", `background-image:url("${nightSky}")`);
+    bodyEl.setAttribute(
+      "style",
+      `background-image:url(${nightSky});background-size:130%,background-position:0, 20px;`
+    );
+    weatherContainerEl.classList.add("night");
     // show dark image
   } else if (universalTime > sunrise) {
-    bodyEl.setAttribute("style", `background-image:url("${daySky}")`);
-    console.log("heym");
-  } else {
-    console.log("yesc");
+    bodyEl.setAttribute(
+      "style",
+      `background-image:url(${daySky});background-size:none`
+    );
+    weatherContainerEl.classList.remove("night");
   }
 };
 

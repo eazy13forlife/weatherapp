@@ -40,4 +40,4 @@ const renderWeather = async (cityName, unit) => {
   }
 };
 
-export { bodyEl, renderWeather, detailsDiv };
+export { bodyEl, renderWeather, detailsDiv, weatherContainerEl };

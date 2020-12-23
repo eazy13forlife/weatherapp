@@ -100,4 +100,11 @@ span {
   display: none;
   font-size: 2.3rem;
 }
+
+div.weather-container.night {
+  color: white;
+}
+div.weather-container.night .details {
+  border-color: white;
+}
 /*end of weather container*/
