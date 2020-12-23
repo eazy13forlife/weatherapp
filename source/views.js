@@ -12,14 +12,16 @@ const weatherContainerEl = document.querySelector(".weather-container");
 const degrees = document.querySelector("#degrees");
 const spanEl = document.querySelector("span");
 const detailsDiv = document.querySelector(".details");
+const mainSelector = document.querySelector("main");
 
 //function that renders all the weather content to the screen;
 const renderWeather = async (cityName, unit) => {
   try {
     spanEl.setAttribute("style", "display:none");
     weatherContainerEl.setAttribute("style", "display:block");
-    const mike = await displayBackground(cityName, unit);
+    await displayBackground(cityName, unit);
     const object = await getWeatherByCity(cityName, unit);
+    mainSelector.setAttribute("style", "animation:opacity 1000ms forwards");
     cityNameEl.textContent = `${object.city}, ${object.state}`;
     cloudyEl.textContent = await cloudValue(cityName);
     //right after some text has shown on the screen but before the details div shows, remove the remove-border class so our border can show again.
@@ -35,9 +37,17 @@ const renderWeather = async (cityName, unit) => {
     }
     humidityEl.textContent = `Humidity: ${object.humidity}%`;
   } catch (e) {
+    mainSelector.setAttribute("style", "animation:opacity 1000ms forwards");
     weatherContainerEl.setAttribute("style", "display:none");
     spanEl.setAttribute("style", "display:block");
   }
 };
 
-export { bodyEl, renderWeather, detailsDiv, weatherContainerEl, spanEl };
+export {
+  bodyEl,
+  renderWeather,
+  detailsDiv,
+  weatherContainerEl,
+  spanEl,
+  mainSelector,
+};

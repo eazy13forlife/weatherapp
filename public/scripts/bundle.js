@@ -37397,7 +37397,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-console.log(_clearnight2.default);
 //function that tells us cloud value based on cloudy percentage
 var cloudValue = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(cityName, unit) {
@@ -37604,17 +37603,19 @@ searchCityEl.addEventListener("keypress", function (e) {
     (0, _views.renderWeather)(cityString, "imperial");
     searchCityEl.value = "";
     cityString = "";
+    _views.mainSelector.setAttribute("style", "animation:none");
   }
 });
+
 //when we click search icon, we call renderWeather with the value of cityString.
 searchIcon.addEventListener("click", function (e) {
   if (cityString.trim() !== "") {
     (0, _views.renderWeather)(cityString, "imperial");
     searchCityEl.value = "";
+    cityString = "";
+    _views.mainSelector.setAttribute("style", "animation:none");
   }
 });
-var sam = _moment2.default.utc().add(43455).valueOf();
-console.log(sam);
 
 /***/ }),
 
@@ -37829,7 +37830,7 @@ exports.getCurrentCity = getCurrentCity;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.spanEl = exports.weatherContainerEl = exports.detailsDiv = exports.renderWeather = exports.bodyEl = undefined;
+exports.mainSelector = exports.spanEl = exports.weatherContainerEl = exports.detailsDiv = exports.renderWeather = exports.bodyEl = undefined;
 
 var _moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 
@@ -37853,11 +37854,12 @@ var weatherContainerEl = document.querySelector(".weather-container");
 var degrees = document.querySelector("#degrees");
 var spanEl = document.querySelector("span");
 var detailsDiv = document.querySelector(".details");
+var mainSelector = document.querySelector("main");
 
 //function that renders all the weather content to the screen;
 var renderWeather = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(cityName, unit) {
-    var mike, object;
+    var object;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -37870,13 +37872,13 @@ var renderWeather = function () {
             return (0, _helperFunctions.displayBackground)(cityName, unit);
 
           case 5:
-            mike = _context.sent;
-            _context.next = 8;
+            _context.next = 7;
             return (0, _requests.getWeatherByCity)(cityName, unit);
 
-          case 8:
+          case 7:
             object = _context.sent;
 
+            mainSelector.setAttribute("style", "animation:opacity 1000ms forwards");
             cityNameEl.textContent = object.city + ", " + object.state;
             _context.next = 12;
             return (0, _helperFunctions.cloudValue)(cityName);
@@ -37896,17 +37898,18 @@ var renderWeather = function () {
               windEl.textContent = "Wind: " + object.wind + " M/S";
             }
             humidityEl.textContent = "Humidity: " + object.humidity + "%";
-            _context.next = 22;
+            _context.next = 23;
             break;
 
           case 18:
             _context.prev = 18;
             _context.t0 = _context["catch"](0);
 
+            mainSelector.setAttribute("style", "animation:opacity 1000ms forwards");
             weatherContainerEl.setAttribute("style", "display:none");
             spanEl.setAttribute("style", "display:block");
 
-          case 22:
+          case 23:
           case "end":
             return _context.stop();
         }
@@ -37924,6 +37927,7 @@ exports.renderWeather = renderWeather;
 exports.detailsDiv = detailsDiv;
 exports.weatherContainerEl = weatherContainerEl;
 exports.spanEl = spanEl;
+exports.mainSelector = mainSelector;
 
 /***/ }),
 

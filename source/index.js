@@ -1,5 +1,5 @@
 import { getWeatherByCity, getCurrentCity } from "./requests.js";
-import { renderWeather, detailsDiv } from "./views.js";
+import { renderWeather, detailsDiv, mainSelector } from "./views.js";
 import moment from "moment";
 /**
 clear at night is shining moon
@@ -40,14 +40,16 @@ searchCityEl.addEventListener("keypress", (e) => {
     renderWeather(cityString, "imperial");
     searchCityEl.value = "";
     cityString = "";
+    mainSelector.setAttribute("style", "animation:none");
   }
 });
+
 //when we click search icon, we call renderWeather with the value of cityString.
 searchIcon.addEventListener("click", (e) => {
   if (cityString.trim() !== "") {
     renderWeather(cityString, "imperial");
     searchCityEl.value = "";
+    cityString = "";
+    mainSelector.setAttribute("style", "animation:none");
   }
 });
-const sam = moment.utc().add(43455).valueOf();
-console.log(sam);

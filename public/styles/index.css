@@ -25,10 +25,7 @@ header {
   padding-bottom: 2rem;
   position: relative;
 }
-body {
-  opacity: 0;
-  animation: opacity 1000ms forwards;
-}
+
 #search_city {
   margin-top: 2rem;
   margin-right: 4rem;

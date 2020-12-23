@@ -3,7 +3,7 @@ import { bodyEl, weatherContainerEl, spanEl } from "./views.js";
 import { getWeatherByCity } from "./requests.js";
 import nightSky from "./background-images/clearnight.jpg";
 import daySky from "./background-images/clearskies.jpg";
-console.log(nightSky);
+
 //function that tells us cloud value based on cloudy percentage
 const cloudValue = async (cityName, unit) => {
   const object = await getWeatherByCity(cityName, unit);
