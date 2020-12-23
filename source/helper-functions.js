@@ -20,35 +20,19 @@ const cloudValue = async (cityName, unit) => {
     return "Clear";
   }
 };
-/*
-daytime background pic
-body {
-background-image: url("../images/clear-skies.jpg");
-background-size: 150%;
-}
-body {
-  background-image: url("../images/patrick-fore-HVFYFns30-I-unsplash.jpg");
-  background-size: 100%;
-}
-*/
+
 //function that displays the body background we want based on sunset/sunsrise
 const displayBackground = async (cityName, unit) => {
   const object = await getWeatherByCity(cityName, unit);
-  const sunrise = moment(object.sunrise + object.timezone)
-    .utc()
-    .toString();
-  const sunset = moment(object.sunset + object.timezone)
-    .utc()
-    .toString();
-  const universalTime = moment.utc().add(object.timezone).toString();
+  const sunrise = object.sunrise + object.timezone;
+  const sunset = object.sunset + object.timezone;
+  const universalTime = moment.utc().add(object.timezone).valueOf();
   //if the time is less than the citys sunset time but greater than the citys sunrise time, show sun because the sun is still up.
   if (universalTime <= sunrise) {
     bodyEl.setAttribute(
       "style",
       `background-image:url(${nightSky});background-size:130%,background-position:0, 20px;`
     );
-    console.log(bodyEl.style.backgroundImage);
-    console.log(nightSky);
     weatherContainerEl.classList.add("night");
     spanEl.classList.add("night");
     // show dark image

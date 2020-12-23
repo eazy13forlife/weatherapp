@@ -37459,17 +37459,7 @@ var cloudValue = function () {
     return _ref.apply(this, arguments);
   };
 }();
-/*
-daytime background pic
-body {
-background-image: url("../images/clear-skies.jpg");
-background-size: 150%;
-}
-body {
-  background-image: url("../images/patrick-fore-HVFYFns30-I-unsplash.jpg");
-  background-size: 100%;
-}
-*/
+
 //function that displays the body background we want based on sunset/sunsrise
 var displayBackground = function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(cityName, unit) {
@@ -37483,15 +37473,13 @@ var displayBackground = function () {
 
           case 2:
             object = _context2.sent;
-            sunrise = (0, _moment2.default)(object.sunrise + object.timezone).utc().toString();
-            sunset = (0, _moment2.default)(object.sunset + object.timezone).utc().toString();
-            universalTime = _moment2.default.utc().add(object.timezone).toString();
+            sunrise = object.sunrise + object.timezone;
+            sunset = object.sunset + object.timezone;
+            universalTime = _moment2.default.utc().add(object.timezone).valueOf();
             //if the time is less than the citys sunset time but greater than the citys sunrise time, show sun because the sun is still up.
 
             if (universalTime <= sunrise) {
               _views.bodyEl.setAttribute("style", "background-image:url(" + _clearnight2.default + ");background-size:130%,background-position:0, 20px;");
-              console.log(_views.bodyEl.style.backgroundImage);
-              console.log(_clearnight2.default);
               _views.weatherContainerEl.classList.add("night");
               _views.spanEl.classList.add("night");
               // show dark image
@@ -37572,20 +37560,29 @@ var onLoad = function () {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _context.next = 2;
+            _context.prev = 0;
+            _context.next = 3;
             return (0, _requests.getCurrentCity)();
 
-          case 2:
+          case 3:
             city = _context.sent;
 
             (0, _views.renderWeather)(city, "imperial");
+            _context.next = 10;
+            break;
 
-          case 4:
+          case 7:
+            _context.prev = 7;
+            _context.t0 = _context["catch"](0);
+
+            (0, _views.renderWeather)("New York", "imperial");
+
+          case 10:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, undefined);
+    }, _callee, undefined, [[0, 7]]);
   }));
 
   return function onLoad() {
@@ -37606,6 +37603,7 @@ searchCityEl.addEventListener("keypress", function (e) {
   if (e.charCode === 13 && cityString.trim() !== "") {
     (0, _views.renderWeather)(cityString, "imperial");
     searchCityEl.value = "";
+    cityString = "";
   }
 });
 //when we click search icon, we call renderWeather with the value of cityString.
@@ -37770,6 +37768,7 @@ var getState = function () {
   };
 }();
 
+//async function to get current location based on ip address
 var getCurrentCity = function () {
   var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
     var responseObject, data;
@@ -37783,24 +37782,22 @@ var getCurrentCity = function () {
           case 2:
             responseObject = _context3.sent;
 
-            console.log(responseObject);
-
             if (!responseObject.ok) {
-              _context3.next = 11;
+              _context3.next = 10;
               break;
             }
 
-            _context3.next = 7;
+            _context3.next = 6;
             return responseObject.json();
 
-          case 7:
+          case 6:
             data = _context3.sent;
             return _context3.abrupt("return", data.city);
 
-          case 11:
+          case 10:
             throw new Error("City not found");
 
-          case 12:
+          case 11:
           case "end":
             return _context3.stop();
         }

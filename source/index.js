@@ -18,8 +18,12 @@ let cityString = "";
 
 //on page load, call onLoad
 const onLoad = async () => {
-  const city = await getCurrentCity();
-  renderWeather(city, "imperial");
+  try {
+    const city = await getCurrentCity();
+    renderWeather(city, "imperial");
+  } catch (e) {
+    renderWeather("New York", "imperial");
+  }
 };
 
 onLoad();
@@ -35,6 +39,7 @@ searchCityEl.addEventListener("keypress", (e) => {
   if (e.charCode === 13 && cityString.trim() !== "") {
     renderWeather(cityString, "imperial");
     searchCityEl.value = "";
+    cityString = "";
   }
 });
 //when we click search icon, we call renderWeather with the value of cityString.

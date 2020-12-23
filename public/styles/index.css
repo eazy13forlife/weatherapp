@@ -72,6 +72,9 @@ div.weather-container {
 #name {
   font-size: 2.5rem;
 }
+main {
+  animation: opacity 1000ms forwards;
+}
 div.weather-details {
   display: flex;
   flex-direction: row;
