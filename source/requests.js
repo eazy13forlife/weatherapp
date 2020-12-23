@@ -58,5 +58,18 @@ const getState = async (cityName) => {
   }
 };
 
+const getCurrentCity = async () => {
+  const responseObject = await fetch(
+    "https://api.ipdata.co/?api-key=e6a2aa84cb3780bfc7f37234e760237a7cf1b836611e1698c4af2027"
+  );
+  console.log(responseObject);
+  if (responseObject.ok) {
+    const data = await responseObject.json();
+    return data.city;
+  } else {
+    throw new Error("City not found");
+  }
+};
+
 // const mike = moment().utc().valueOf();
-export default getWeatherByCity;
+export { getWeatherByCity, getCurrentCity };

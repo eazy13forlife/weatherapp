@@ -37385,8 +37385,6 @@ var _views = __webpack_require__(/*! ./views.js */ "./source/views.js");
 
 var _requests = __webpack_require__(/*! ./requests.js */ "./source/requests.js");
 
-var _requests2 = _interopRequireDefault(_requests);
-
 var _clearnight = __webpack_require__(/*! ./background-images/clearnight.jpg */ "./source/background-images/clearnight.jpg");
 
 var _clearnight2 = _interopRequireDefault(_clearnight);
@@ -37409,7 +37407,7 @@ var cloudValue = function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return (0, _requests2.default)(cityName, unit);
+            return (0, _requests.getWeatherByCity)(cityName, unit);
 
           case 2:
             object = _context.sent;
@@ -37436,7 +37434,7 @@ var cloudValue = function () {
               break;
             }
 
-            return _context.abrupt("return", "Partly Sunny");
+            return _context.abrupt("return", "Partly Clear");
 
           case 16:
             if (!(percent > 25)) {
@@ -37444,10 +37442,10 @@ var cloudValue = function () {
               break;
             }
 
-            return _context.abrupt("return", "Mostly Sunny");
+            return _context.abrupt("return", "Mostly Clear");
 
           case 20:
-            return _context.abrupt("return", "Sunny");
+            return _context.abrupt("return", "Clear");
 
           case 21:
           case "end":
@@ -37481,7 +37479,7 @@ var displayBackground = function () {
         switch (_context2.prev = _context2.next) {
           case 0:
             _context2.next = 2;
-            return (0, _requests2.default)(cityName, unit);
+            return (0, _requests.getWeatherByCity)(cityName, unit);
 
           case 2:
             object = _context2.sent;
@@ -37536,8 +37534,6 @@ exports.displayBackground = displayBackground;
 
 var _requests = __webpack_require__(/*! ./requests.js */ "./source/requests.js");
 
-var _requests2 = _interopRequireDefault(_requests);
-
 var _views = __webpack_require__(/*! ./views.js */ "./source/views.js");
 
 var _moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
@@ -37545,6 +37541,8 @@ var _moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js
 var _moment2 = _interopRequireDefault(_moment);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 /**
 clear at night is shining moon
@@ -37557,10 +37555,40 @@ sunset or maybe 30 minutes afterwill show night image;
 
 //for some reason the border to the left of the details div shows at page load, so I added a class that remooves this border on page load. We will add this border back into renderweather function instead.
 _views.detailsDiv.classList.add("remove-border");
-
 var searchCityEl = document.querySelector("#search_city");
 var searchIcon = document.querySelector("#search_icon");
 var cityString = "";
+
+//on page load, call onLoad
+var onLoad = function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+    var city;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return (0, _requests.getCurrentCity)();
+
+          case 2:
+            city = _context.sent;
+
+            (0, _views.renderWeather)(city, "imperial");
+
+          case 4:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, undefined);
+  }));
+
+  return function onLoad() {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+onLoad();
 
 //when we type in the search bar, the value of cityString changes
 searchCityEl.addEventListener("input", function (e) {
@@ -37598,6 +37626,7 @@ console.log(sam);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.getCurrentCity = exports.getWeatherByCity = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -37734,8 +37763,52 @@ var getState = function () {
   };
 }();
 
+var getCurrentCity = function () {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+    var responseObject, data;
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.next = 2;
+            return fetch("https://api.ipdata.co/?api-key=e6a2aa84cb3780bfc7f37234e760237a7cf1b836611e1698c4af2027");
+
+          case 2:
+            responseObject = _context3.sent;
+
+            console.log(responseObject);
+
+            if (!responseObject.ok) {
+              _context3.next = 11;
+              break;
+            }
+
+            _context3.next = 7;
+            return responseObject.json();
+
+          case 7:
+            data = _context3.sent;
+            return _context3.abrupt("return", data.city);
+
+          case 11:
+            throw new Error("City not found");
+
+          case 12:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3, undefined);
+  }));
+
+  return function getCurrentCity() {
+    return _ref3.apply(this, arguments);
+  };
+}();
+
 // const mike = moment().utc().valueOf();
-exports.default = getWeatherByCity;
+exports.getWeatherByCity = getWeatherByCity;
+exports.getCurrentCity = getCurrentCity;
 
 /***/ }),
 
@@ -37759,8 +37832,6 @@ var _moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js
 var _moment2 = _interopRequireDefault(_moment);
 
 var _requests = __webpack_require__(/*! ./requests.js */ "./source/requests.js");
-
-var _requests2 = _interopRequireDefault(_requests);
 
 var _helperFunctions = __webpack_require__(/*! ./helper-functions.js */ "./source/helper-functions.js");
 
@@ -37797,7 +37868,7 @@ var renderWeather = function () {
           case 5:
             mike = _context.sent;
             _context.next = 8;
-            return (0, _requests2.default)(cityName, unit);
+            return (0, _requests.getWeatherByCity)(cityName, unit);
 
           case 8:
             object = _context.sent;

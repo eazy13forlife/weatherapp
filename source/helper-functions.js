@@ -1,6 +1,6 @@
 import moment from "moment";
 import { bodyEl, weatherContainerEl } from "./views.js";
-import getWeatherByCity from "./requests.js";
+import { getWeatherByCity } from "./requests.js";
 import nightSky from "./background-images/clearnight.jpg";
 import daySky from "./background-images/clearskies.jpg";
 console.log(nightSky);
@@ -13,11 +13,11 @@ const cloudValue = async (cityName, unit) => {
   } else if (percent > 69) {
     return "Mostly Cloudy";
   } else if (percent > 50) {
-    return "Partly Sunny";
+    return "Partly Clear";
   } else if (percent > 25) {
-    return "Mostly Sunny";
+    return "Mostly Clear";
   } else {
-    return "Sunny";
+    return "Clear";
   }
 };
 /*

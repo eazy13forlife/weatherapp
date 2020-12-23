@@ -1,5 +1,5 @@
 import moment from "moment";
-import getWeatherByCity from "./requests.js";
+import { getWeatherByCity } from "./requests.js";
 import { cloudValue, displayBackground } from "./helper-functions.js";
 
 const cityNameEl = document.querySelector("#name");
