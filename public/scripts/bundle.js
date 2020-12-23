@@ -37375,7 +37375,7 @@ exports.geocoderKey = geocoderKey;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.displayBackground = exports.cloudValue = undefined;
+exports.getTime = exports.displayBackground = exports.cloudValue = undefined;
 
 var _moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 
@@ -37479,13 +37479,11 @@ var displayBackground = function () {
 
             if (universalTime <= sunrise) {
               _views.bodyEl.setAttribute("style", "background-image:url(" + _clearnight2.default + ");background-size:130%,background-position:0, 20px;");
-              _views.weatherContainerEl.classList.add("night");
-              _views.spanEl.classList.add("night");
+              addClass("night", _views.timeEl, _views.weatherContainerEl, _views.spanEl);
               // show dark image
             } else if (universalTime > sunrise) {
               _views.bodyEl.setAttribute("style", "background-image:url(" + _clearskies2.default + ");background-size:none");
-              _views.weatherContainerEl.classList.remove("night");
-              _views.spanEl.classList.remove("night");
+              removeClass("night", _views.timeEl, _views.weatherContainerEl, _views.spanEl);
             }
 
           case 7:
@@ -37501,6 +37499,55 @@ var displayBackground = function () {
   };
 }();
 
+var addClass = function addClass(className) {
+  for (var _len = arguments.length, elements = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    elements[_key - 1] = arguments[_key];
+  }
+
+  elements.forEach(function (element) {
+    element.classList.add(className);
+  });
+};
+
+var removeClass = function removeClass(className) {
+  for (var _len2 = arguments.length, elements = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+    elements[_key2 - 1] = arguments[_key2];
+  }
+
+  elements.forEach(function (element) {
+    element.classList.remove(className);
+  });
+};
+//get the current time for our city
+var getTime = function () {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(cityName, unit) {
+    var object, time;
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.next = 2;
+            return (0, _requests.getWeatherByCity)(cityName, unit);
+
+          case 2:
+            object = _context3.sent;
+            time = _moment2.default.utc().add(object.timezone).format("MMM Do, h:mm a");
+            return _context3.abrupt("return", time);
+
+          case 5:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3, undefined);
+  }));
+
+  return function getTime(_x5, _x6) {
+    return _ref3.apply(this, arguments);
+  };
+}();
+
+//function that handles our errors
 var handleErrors = function handleErrors(singleFunction) {
   return function (cityName, unit) {
     return singleFunction(cityName, unit).catch(function (error) {
@@ -37511,6 +37558,7 @@ var handleErrors = function handleErrors(singleFunction) {
 
 exports.cloudValue = cloudValue;
 exports.displayBackground = displayBackground;
+exports.getTime = getTime;
 
 /***/ }),
 
@@ -37591,28 +37639,22 @@ var onLoad = function () {
 
 onLoad();
 
-//when we type in the search bar, the value of cityString changes
-searchCityEl.addEventListener("input", function (e) {
-  cityString = "";
-  cityString = e.target.value;
-});
-
 //when we press enter in search bar, we call renderWeather with the value of cityString.
 searchCityEl.addEventListener("keypress", function (e) {
+  var cityString = searchCityEl.value;
   if (e.charCode === 13 && cityString.trim() !== "") {
     (0, _views.renderWeather)(cityString, "imperial");
     searchCityEl.value = "";
-    cityString = "";
     _views.mainSelector.setAttribute("style", "animation:none");
   }
 });
 
 //when we click search icon, we call renderWeather with the value of cityString.
 searchIcon.addEventListener("click", function (e) {
+  var cityString = searchCityEl.value;
   if (cityString.trim() !== "") {
     (0, _views.renderWeather)(cityString, "imperial");
     searchCityEl.value = "";
-    cityString = "";
     _views.mainSelector.setAttribute("style", "animation:none");
   }
 });
@@ -37830,7 +37872,7 @@ exports.getCurrentCity = getCurrentCity;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.mainSelector = exports.spanEl = exports.weatherContainerEl = exports.detailsDiv = exports.renderWeather = exports.bodyEl = undefined;
+exports.timeEl = exports.mainSelector = exports.spanEl = exports.weatherContainerEl = exports.detailsDiv = exports.renderWeather = exports.bodyEl = undefined;
 
 var _moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 
@@ -37855,6 +37897,7 @@ var degrees = document.querySelector("#degrees");
 var spanEl = document.querySelector("span");
 var detailsDiv = document.querySelector(".details");
 var mainSelector = document.querySelector("main");
+var timeEl = document.querySelector("#time");
 
 //function that renders all the weather content to the screen;
 var renderWeather = function () {
@@ -37881,10 +37924,15 @@ var renderWeather = function () {
             mainSelector.setAttribute("style", "animation:opacity 1000ms forwards");
             cityNameEl.textContent = object.city + ", " + object.state;
             _context.next = 12;
-            return (0, _helperFunctions.cloudValue)(cityName);
+            return (0, _helperFunctions.cloudValue)(cityName, unit);
 
           case 12:
             cloudyEl.textContent = _context.sent;
+            _context.next = 15;
+            return (0, _helperFunctions.getTime)(cityName, unit);
+
+          case 15:
+            timeEl.textContent = _context.sent;
 
             //right after some text has shown on the screen but before the details div shows, remove the remove-border class so our border can show again.
             detailsDiv.classList.remove("remove-border");
@@ -37898,23 +37946,23 @@ var renderWeather = function () {
               windEl.textContent = "Wind: " + object.wind + " M/S";
             }
             humidityEl.textContent = "Humidity: " + object.humidity + "%";
-            _context.next = 23;
+            _context.next = 26;
             break;
 
-          case 18:
-            _context.prev = 18;
+          case 21:
+            _context.prev = 21;
             _context.t0 = _context["catch"](0);
 
             mainSelector.setAttribute("style", "animation:opacity 1000ms forwards");
             weatherContainerEl.setAttribute("style", "display:none");
             spanEl.setAttribute("style", "display:block");
 
-          case 23:
+          case 26:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, undefined, [[0, 18]]);
+    }, _callee, undefined, [[0, 21]]);
   }));
 
   return function renderWeather(_x, _x2) {
@@ -37928,6 +37976,7 @@ exports.detailsDiv = detailsDiv;
 exports.weatherContainerEl = weatherContainerEl;
 exports.spanEl = spanEl;
 exports.mainSelector = mainSelector;
+exports.timeEl = timeEl;
 
 /***/ }),
 

@@ -28,28 +28,22 @@ const onLoad = async () => {
 
 onLoad();
 
-//when we type in the search bar, the value of cityString changes
-searchCityEl.addEventListener("input", (e) => {
-  cityString = "";
-  cityString = e.target.value;
-});
-
 //when we press enter in search bar, we call renderWeather with the value of cityString.
 searchCityEl.addEventListener("keypress", (e) => {
+  let cityString = searchCityEl.value;
   if (e.charCode === 13 && cityString.trim() !== "") {
     renderWeather(cityString, "imperial");
     searchCityEl.value = "";
-    cityString = "";
     mainSelector.setAttribute("style", "animation:none");
   }
 });
 
 //when we click search icon, we call renderWeather with the value of cityString.
 searchIcon.addEventListener("click", (e) => {
+  let cityString = searchCityEl.value;
   if (cityString.trim() !== "") {
     renderWeather(cityString, "imperial");
     searchCityEl.value = "";
-    cityString = "";
     mainSelector.setAttribute("style", "animation:none");
   }
 });

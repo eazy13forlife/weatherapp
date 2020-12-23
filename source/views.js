@@ -1,6 +1,6 @@
 import moment from "moment";
 import { getWeatherByCity } from "./requests.js";
-import { cloudValue, displayBackground } from "./helper-functions.js";
+import { cloudValue, displayBackground, getTime } from "./helper-functions.js";
 
 const cityNameEl = document.querySelector("#name");
 const cloudyEl = document.querySelector("#cloudy");
@@ -13,6 +13,7 @@ const degrees = document.querySelector("#degrees");
 const spanEl = document.querySelector("span");
 const detailsDiv = document.querySelector(".details");
 const mainSelector = document.querySelector("main");
+const timeEl = document.querySelector("#time");
 
 //function that renders all the weather content to the screen;
 const renderWeather = async (cityName, unit) => {
@@ -23,7 +24,8 @@ const renderWeather = async (cityName, unit) => {
     const object = await getWeatherByCity(cityName, unit);
     mainSelector.setAttribute("style", "animation:opacity 1000ms forwards");
     cityNameEl.textContent = `${object.city}, ${object.state}`;
-    cloudyEl.textContent = await cloudValue(cityName);
+    cloudyEl.textContent = await cloudValue(cityName, unit);
+    timeEl.textContent = await getTime(cityName, unit);
     //right after some text has shown on the screen but before the details div shows, remove the remove-border class so our border can show again.
     detailsDiv.classList.remove("remove-border");
     if (unit === "imperial") {
@@ -50,4 +52,5 @@ export {
   weatherContainerEl,
   spanEl,
   mainSelector,
+  timeEl,
 };

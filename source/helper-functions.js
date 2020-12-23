@@ -1,5 +1,5 @@
 import moment from "moment";
-import { bodyEl, weatherContainerEl, spanEl } from "./views.js";
+import { bodyEl, weatherContainerEl, spanEl, timeEl } from "./views.js";
 import { getWeatherByCity } from "./requests.js";
 import nightSky from "./background-images/clearnight.jpg";
 import daySky from "./background-images/clearskies.jpg";
@@ -33,19 +33,36 @@ const displayBackground = async (cityName, unit) => {
       "style",
       `background-image:url(${nightSky});background-size:130%,background-position:0, 20px;`
     );
-    weatherContainerEl.classList.add("night");
-    spanEl.classList.add("night");
+    addClass("night", timeEl, weatherContainerEl, spanEl);
     // show dark image
   } else if (universalTime > sunrise) {
     bodyEl.setAttribute(
       "style",
       `background-image:url(${daySky});background-size:none`
     );
-    weatherContainerEl.classList.remove("night");
-    spanEl.classList.remove("night");
+    removeClass("night", timeEl, weatherContainerEl, spanEl);
   }
 };
 
+const addClass = (className, ...elements) => {
+  elements.forEach((element) => {
+    element.classList.add(className);
+  });
+};
+
+const removeClass = (className, ...elements) => {
+  elements.forEach((element) => {
+    element.classList.remove(className);
+  });
+};
+//get the current time for our city
+const getTime = async (cityName, unit) => {
+  const object = await getWeatherByCity(cityName, unit);
+  const time = moment.utc().add(object.timezone).format("MMM Do, h:mm a");
+  return time;
+};
+
+//function that handles our errors
 const handleErrors = (singleFunction) => {
   return (cityName, unit) => {
     return singleFunction(cityName, unit).catch((error) => {
@@ -54,4 +71,4 @@ const handleErrors = (singleFunction) => {
   };
 };
 
-export { cloudValue, displayBackground };
+export { cloudValue, displayBackground, getTime };
