@@ -27,7 +27,6 @@ header {
 }
 body {
   background-image: url("../images/clear-skies.jpg");
-  background-size: 100%;
 }
 #search_city {
   margin-top: 2rem;

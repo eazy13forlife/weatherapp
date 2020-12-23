@@ -37315,6 +37315,32 @@ module.exports = function(module) {
 
 /***/ }),
 
+/***/ "./source/background-images/clearnight.jpg":
+/*!*************************************************!*\
+  !*** ./source/background-images/clearnight.jpg ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "../../public/scripts/clearnight.jpg");
+
+/***/ }),
+
+/***/ "./source/background-images/clearskies.jpg":
+/*!*************************************************!*\
+  !*** ./source/background-images/clearskies.jpg ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "../../public/scripts/clearskies.jpg");
+
+/***/ }),
+
 /***/ "./source/configkeys.js":
 /*!******************************!*\
   !*** ./source/configkeys.js ***!
@@ -37361,10 +37387,19 @@ var _requests = __webpack_require__(/*! ./requests.js */ "./source/requests.js")
 
 var _requests2 = _interopRequireDefault(_requests);
 
+var _clearnight = __webpack_require__(/*! ./background-images/clearnight.jpg */ "./source/background-images/clearnight.jpg");
+
+var _clearnight2 = _interopRequireDefault(_clearnight);
+
+var _clearskies = __webpack_require__(/*! ./background-images/clearskies.jpg */ "./source/background-images/clearskies.jpg");
+
+var _clearskies2 = _interopRequireDefault(_clearskies);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
+console.log(_clearnight2.default);
 //function that tells us cloud value based on cloudy percentage
 var cloudValue = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(cityName, unit) {
@@ -37450,19 +37485,28 @@ var displayBackground = function () {
 
           case 2:
             object = _context2.sent;
-            sunrise = object.sunrise;
-            sunset = object.sunset;
-            universalTime = _moment2.default.utc().valueOf();
-            //if the time is less than the citys sunset time but greater than the citys sunrise time, show sun because the sun is still up.
 
-            if (universalTime >= sunrise && universalTime <= sunset) {
-              _views.bodyEl.setAttribute("style", "background-image:" + nightSky);
+            console.log(object);
+            sunrise = (0, _moment2.default)(object.sunrise + object.timezone).utc().toString();
+            sunset = (0, _moment2.default)(object.sunset + object.timezone).utc().toString();
+            universalTime = _moment2.default.utc().add(object.timezone).toString();
+
+            console.log(universalTime);
+            console.log(sunrise);
+            console.log(sunset);
+            //if the time is less than the citys sunset time but greater than the citys sunrise time, show sun because the sun is still up.
+            if (universalTime <= sunrise) {
+              console.log("hey");
+              _views.bodyEl.setAttribute("style", "background-image:url(\"" + _clearnight2.default + "\")");
               // show dark image
-            } else if (universalTime >= sunset && universalTime <= sunrise) {
-              _views.bodyEl.setAttribute("style", "background-image:" + daySky);
+            } else if (universalTime > sunrise) {
+              _views.bodyEl.setAttribute("style", "background-image:url(\"" + _clearskies2.default + "\")");
+              console.log("heym");
+            } else {
+              console.log("yesc");
             }
 
-          case 7:
+          case 11:
           case "end":
             return _context2.stop();
         }
@@ -37543,8 +37587,7 @@ searchIcon.addEventListener("click", function (e) {
     (0, _views.renderWeather)(cityString, "imperial");
   }
 });
-var currentTime = (0, _moment2.default)().valueOf();
-var sam = (0, _moment2.default)(1608703376566).utc().format("dddd, MMMM Do YYYY, h:mm:ss a");
+var sam = _moment2.default.utc().add(43455).valueOf();
 console.log(sam);
 
 /***/ }),
@@ -37746,7 +37789,7 @@ var detailsDiv = document.querySelector(".details");
 //function that renders all the weather content to the screen;
 var renderWeather = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(cityName, unit) {
-    var object;
+    var mike, object;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -37756,16 +37799,21 @@ var renderWeather = function () {
             spanEl.setAttribute("style", "display:none");
             weatherContainerEl.setAttribute("style", "display:block");
             _context.next = 5;
-            return (0, _requests2.default)(cityName, unit);
+            return (0, _helperFunctions.displayBackground)(cityName, unit);
 
           case 5:
+            mike = _context.sent;
+            _context.next = 8;
+            return (0, _requests2.default)(cityName, unit);
+
+          case 8:
             object = _context.sent;
 
             cityNameEl.textContent = object.city + ", " + object.state;
-            _context.next = 9;
+            _context.next = 12;
             return (0, _helperFunctions.cloudValue)(cityName);
 
-          case 9:
+          case 12:
             cloudyEl.textContent = _context.sent;
 
             //right after some text has shown on the screen but before the details div shows, remove the remove-border class so our border can show again.
@@ -37780,22 +37828,22 @@ var renderWeather = function () {
               windEl.textContent = "Wind: " + object.wind + " M/S";
             }
             humidityEl.textContent = "Humidity: " + object.humidity + "%";
-            _context.next = 19;
+            _context.next = 22;
             break;
 
-          case 15:
-            _context.prev = 15;
+          case 18:
+            _context.prev = 18;
             _context.t0 = _context["catch"](0);
 
             weatherContainerEl.setAttribute("style", "display:none");
             spanEl.setAttribute("style", "display:block");
 
-          case 19:
+          case 22:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, undefined, [[0, 15]]);
+    }, _callee, undefined, [[0, 18]]);
   }));
 
   return function renderWeather(_x, _x2) {

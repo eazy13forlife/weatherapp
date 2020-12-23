@@ -35,6 +35,5 @@ searchIcon.addEventListener("click", (e) => {
     renderWeather(cityString, "imperial");
   }
 });
-const currentTime = moment().valueOf();
-const sam = moment(1608703376566).utc().format("dddd, MMMM Do YYYY, h:mm:ss a");
+const sam = moment.utc().add(43455).valueOf();
 console.log(sam);

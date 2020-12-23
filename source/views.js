@@ -1,6 +1,6 @@
 import moment from "moment";
 import getWeatherByCity from "./requests.js";
-import { cloudValue } from "./helper-functions.js";
+import { cloudValue, displayBackground } from "./helper-functions.js";
 
 const cityNameEl = document.querySelector("#name");
 const cloudyEl = document.querySelector("#cloudy");
@@ -18,6 +18,7 @@ const renderWeather = async (cityName, unit) => {
   try {
     spanEl.setAttribute("style", "display:none");
     weatherContainerEl.setAttribute("style", "display:block");
+    const mike = await displayBackground(cityName, unit);
     const object = await getWeatherByCity(cityName, unit);
     cityNameEl.textContent = `${object.city}, ${object.state}`;
     cloudyEl.textContent = await cloudValue(cityName);
