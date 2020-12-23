@@ -36,20 +36,19 @@ const displayBackground = async (cityName, unit) => {
     addClass("night", timeEl, weatherContainerEl, spanEl);
     // show dark image
   } else if (universalTime > sunrise) {
-    bodyEl.setAttribute(
-      "style",
-      `background-image:url(${daySky});background-size:none`
-    );
+    bodyEl.setAttribute("style", `background-image:url(${daySky});`);
     removeClass("night", timeEl, weatherContainerEl, spanEl);
   }
 };
 
+//function to add a class to a list of elements
 const addClass = (className, ...elements) => {
   elements.forEach((element) => {
     element.classList.add(className);
   });
 };
 
+//function to remove a class from a list of elements
 const removeClass = (className, ...elements) => {
   elements.forEach((element) => {
     element.classList.remove(className);
@@ -60,15 +59,6 @@ const getTime = async (cityName, unit) => {
   const object = await getWeatherByCity(cityName, unit);
   const time = moment.utc().add(object.timezone).format("MMM Do, h:mm a");
   return time;
-};
-
-//function that handles our errors
-const handleErrors = (singleFunction) => {
-  return (cityName, unit) => {
-    return singleFunction(cityName, unit).catch((error) => {
-      console.log("city not found");
-    });
-  };
 };
 
 export { cloudValue, displayBackground, getTime };

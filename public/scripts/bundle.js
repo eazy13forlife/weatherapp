@@ -37482,7 +37482,7 @@ var displayBackground = function () {
               addClass("night", _views.timeEl, _views.weatherContainerEl, _views.spanEl);
               // show dark image
             } else if (universalTime > sunrise) {
-              _views.bodyEl.setAttribute("style", "background-image:url(" + _clearskies2.default + ");background-size:none");
+              _views.bodyEl.setAttribute("style", "background-image:url(" + _clearskies2.default + ");");
               removeClass("night", _views.timeEl, _views.weatherContainerEl, _views.spanEl);
             }
 
@@ -37499,6 +37499,7 @@ var displayBackground = function () {
   };
 }();
 
+//function to add a class to a list of elements
 var addClass = function addClass(className) {
   for (var _len = arguments.length, elements = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
     elements[_key - 1] = arguments[_key];
@@ -37509,6 +37510,7 @@ var addClass = function addClass(className) {
   });
 };
 
+//function to remove a class from a list of elements
 var removeClass = function removeClass(className) {
   for (var _len2 = arguments.length, elements = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
     elements[_key2 - 1] = arguments[_key2];
@@ -37546,15 +37548,6 @@ var getTime = function () {
     return _ref3.apply(this, arguments);
   };
 }();
-
-//function that handles our errors
-var handleErrors = function handleErrors(singleFunction) {
-  return function (cityName, unit) {
-    return singleFunction(cityName, unit).catch(function (error) {
-      console.log("city not found");
-    });
-  };
-};
 
 exports.cloudValue = cloudValue;
 exports.displayBackground = displayBackground;
@@ -37595,69 +37588,48 @@ sunset or maybe 30 minutes afterwill show night image;
 
 //for some reason the border to the left of the details div shows at page load, so I added a class that remooves this border on page load. We will add this border back into renderweather function instead.
 _views.detailsDiv.classList.add("remove-border");
-var searchCityEl = document.querySelector("#search_city");
 var searchIcon = document.querySelector("#search_icon");
-var cityString = "";
 
 //on page load, call onLoad
 var onLoad = function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(unit) {
     var city;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _context.prev = 0;
-            _context.next = 3;
+            _context.next = 2;
             return (0, _requests.getCurrentCity)();
 
-          case 3:
+          case 2:
             city = _context.sent;
 
-            (0, _views.renderWeather)(city, "imperial");
-            _context.next = 10;
-            break;
+            (0, _views.renderWeatherPageLoad)(city, unit);
 
-          case 7:
-            _context.prev = 7;
-            _context.t0 = _context["catch"](0);
-
-            (0, _views.renderWeather)("New York", "imperial");
-
-          case 10:
+          case 4:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, undefined, [[0, 7]]);
+    }, _callee, undefined);
   }));
 
-  return function onLoad() {
+  return function onLoad(_x) {
     return _ref.apply(this, arguments);
   };
 }();
 
-onLoad();
+onLoad("imperial");
 
 //when we press enter in search bar, we call renderWeather with the value of cityString.
-searchCityEl.addEventListener("keypress", function (e) {
-  var cityString = searchCityEl.value;
-  if (e.charCode === 13 && cityString.trim() !== "") {
-    (0, _views.renderWeather)(cityString, "imperial");
-    searchCityEl.value = "";
-    _views.mainSelector.setAttribute("style", "animation:none");
+_views.searchCityEl.addEventListener("keypress", function (e) {
+  if (e.charCode === 13) {
+    (0, _views.searchEvent)(e);
   }
 });
 
 //when we click search icon, we call renderWeather with the value of cityString.
-searchIcon.addEventListener("click", function (e) {
-  var cityString = searchCityEl.value;
-  if (cityString.trim() !== "") {
-    (0, _views.renderWeather)(cityString, "imperial");
-    searchCityEl.value = "";
-    _views.mainSelector.setAttribute("style", "animation:none");
-  }
-});
+searchIcon.addEventListener("click", _views.searchEvent);
 
 /***/ }),
 
@@ -37872,7 +37844,7 @@ exports.getCurrentCity = getCurrentCity;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.timeEl = exports.mainSelector = exports.spanEl = exports.weatherContainerEl = exports.detailsDiv = exports.renderWeather = exports.bodyEl = undefined;
+exports.renderWeatherPageLoad = exports.searchEvent = exports.searchCityEl = exports.timeEl = exports.mainSelector = exports.spanEl = exports.weatherContainerEl = exports.detailsDiv = exports.renderWeather = exports.bodyEl = undefined;
 
 var _moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 
@@ -37898,40 +37870,36 @@ var spanEl = document.querySelector("span");
 var detailsDiv = document.querySelector(".details");
 var mainSelector = document.querySelector("main");
 var timeEl = document.querySelector("#time");
+var searchCityEl = document.querySelector("#search_city");
 
-//function that renders all the weather content to the screen;
-var renderWeather = function () {
+//function that renders all the weather content to the screen. No errors are checked in this;
+var renderWeatherNoError = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(cityName, unit) {
     var object;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _context.prev = 0;
-
             spanEl.setAttribute("style", "display:none");
             weatherContainerEl.setAttribute("style", "display:block");
+            (0, _helperFunctions.displayBackground)(cityName, unit);
             _context.next = 5;
-            return (0, _helperFunctions.displayBackground)(cityName, unit);
-
-          case 5:
-            _context.next = 7;
             return (0, _requests.getWeatherByCity)(cityName, unit);
 
-          case 7:
+          case 5:
             object = _context.sent;
 
             mainSelector.setAttribute("style", "animation:opacity 1000ms forwards");
             cityNameEl.textContent = object.city + ", " + object.state;
-            _context.next = 12;
+            _context.next = 10;
             return (0, _helperFunctions.cloudValue)(cityName, unit);
 
-          case 12:
+          case 10:
             cloudyEl.textContent = _context.sent;
-            _context.next = 15;
+            _context.next = 13;
             return (0, _helperFunctions.getTime)(cityName, unit);
 
-          case 15:
+          case 13:
             timeEl.textContent = _context.sent;
 
             //right after some text has shown on the screen but before the details div shows, remove the remove-border class so our border can show again.
@@ -37946,29 +37914,54 @@ var renderWeather = function () {
               windEl.textContent = "Wind: " + object.wind + " M/S";
             }
             humidityEl.textContent = "Humidity: " + object.humidity + "%";
-            _context.next = 26;
-            break;
 
-          case 21:
-            _context.prev = 21;
-            _context.t0 = _context["catch"](0);
-
-            mainSelector.setAttribute("style", "animation:opacity 1000ms forwards");
-            weatherContainerEl.setAttribute("style", "display:none");
-            spanEl.setAttribute("style", "display:block");
-
-          case 26:
+          case 17:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, undefined, [[0, 21]]);
+    }, _callee, undefined);
   }));
 
-  return function renderWeather(_x, _x2) {
+  return function renderWeatherNoError(_x, _x2) {
     return _ref.apply(this, arguments);
   };
 }();
+
+//function to handle errors for our renderWeather on page load
+var handleErrorsPageLoad = function handleErrorsPageLoad(singleFunction) {
+  return function (cityName, unit) {
+    return singleFunction(cityName, unit).catch(function (error) {
+      console.log("mike");
+    });
+  };
+};
+//function to handle errors for our general renderWeather function
+var handleErrors = function handleErrors(singleFunction) {
+  return function (cityName, unit) {
+    return singleFunction(cityName, unit).catch(function (error) {
+      mainSelector.setAttribute("style", "animation:opacity 1000ms forwards");
+      weatherContainerEl.setAttribute("style", "display:none");
+      spanEl.setAttribute("style", "display:block");
+    });
+  };
+};
+
+//our new general renderWeather function  after checking for errors
+var renderWeather = handleErrors(renderWeatherNoError);
+
+//our new renderWeather function for page load after checking for errors
+var renderWeatherPageLoad = handleErrorsPageLoad(renderWeatherNoError);
+
+//function to run when using our click or enter event to search for city name
+var searchEvent = function searchEvent(e) {
+  var cityString = searchCityEl.value;
+  if (cityString.trim() !== "") {
+    renderWeather(cityString, "imperial");
+    searchCityEl.value = "";
+    mainSelector.setAttribute("style", "animation:none");
+  }
+};
 
 exports.bodyEl = bodyEl;
 exports.renderWeather = renderWeather;
@@ -37977,6 +37970,9 @@ exports.weatherContainerEl = weatherContainerEl;
 exports.spanEl = spanEl;
 exports.mainSelector = mainSelector;
 exports.timeEl = timeEl;
+exports.searchCityEl = searchCityEl;
+exports.searchEvent = searchEvent;
+exports.renderWeatherPageLoad = renderWeatherPageLoad;
 
 /***/ }),
 

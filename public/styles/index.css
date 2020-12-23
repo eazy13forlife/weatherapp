@@ -22,7 +22,7 @@ ul {
 #time {
   font-size: 1.3rem;
   margin-left: 6rem;
-  color: yellow;
+  color: white;
 }
 #time.night {
   color: white;
@@ -73,7 +73,7 @@ div.weather-container {
   width: 50%;
   margin-left: 6em;
   margin-top: 4em;
-  color: yellow;
+  color: white;
 }
 #cloudy {
   font-size: 1.4rem;
@@ -98,7 +98,7 @@ div.weather {
 }
 div.details {
   margin-left: 1.5em;
-  border-left: 1px solid yellow;
+  border-left: 1px solid white;
   padding-left: 1.5em;
 }
 div.details.remove-border {
