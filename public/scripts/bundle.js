@@ -37490,11 +37490,15 @@ var displayBackground = function () {
 
             if (universalTime <= sunrise) {
               _views.bodyEl.setAttribute("style", "background-image:url(" + _clearnight2.default + ");background-size:130%,background-position:0, 20px;");
+              console.log(_views.bodyEl.style.backgroundImage);
+              console.log(_clearnight2.default);
               _views.weatherContainerEl.classList.add("night");
+              _views.spanEl.classList.add("night");
               // show dark image
             } else if (universalTime > sunrise) {
               _views.bodyEl.setAttribute("style", "background-image:url(" + _clearskies2.default + ");background-size:none");
               _views.weatherContainerEl.classList.remove("night");
+              _views.spanEl.classList.remove("night");
             }
 
           case 7:
@@ -37517,6 +37521,7 @@ var handleErrors = function handleErrors(singleFunction) {
     });
   };
 };
+
 exports.cloudValue = cloudValue;
 exports.displayBackground = displayBackground;
 
@@ -37600,12 +37605,14 @@ searchCityEl.addEventListener("input", function (e) {
 searchCityEl.addEventListener("keypress", function (e) {
   if (e.charCode === 13 && cityString.trim() !== "") {
     (0, _views.renderWeather)(cityString, "imperial");
+    searchCityEl.value = "";
   }
 });
 //when we click search icon, we call renderWeather with the value of cityString.
 searchIcon.addEventListener("click", function (e) {
   if (cityString.trim() !== "") {
     (0, _views.renderWeather)(cityString, "imperial");
+    searchCityEl.value = "";
   }
 });
 var sam = _moment2.default.utc().add(43455).valueOf();
@@ -37825,7 +37832,7 @@ exports.getCurrentCity = getCurrentCity;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.weatherContainerEl = exports.detailsDiv = exports.renderWeather = exports.bodyEl = undefined;
+exports.spanEl = exports.weatherContainerEl = exports.detailsDiv = exports.renderWeather = exports.bodyEl = undefined;
 
 var _moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 
@@ -37919,6 +37926,7 @@ exports.bodyEl = bodyEl;
 exports.renderWeather = renderWeather;
 exports.detailsDiv = detailsDiv;
 exports.weatherContainerEl = weatherContainerEl;
+exports.spanEl = spanEl;
 
 /***/ }),
 

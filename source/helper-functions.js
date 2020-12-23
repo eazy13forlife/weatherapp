@@ -1,5 +1,5 @@
 import moment from "moment";
-import { bodyEl, weatherContainerEl } from "./views.js";
+import { bodyEl, weatherContainerEl, spanEl } from "./views.js";
 import { getWeatherByCity } from "./requests.js";
 import nightSky from "./background-images/clearnight.jpg";
 import daySky from "./background-images/clearskies.jpg";
@@ -47,7 +47,10 @@ const displayBackground = async (cityName, unit) => {
       "style",
       `background-image:url(${nightSky});background-size:130%,background-position:0, 20px;`
     );
+    console.log(bodyEl.style.backgroundImage);
+    console.log(nightSky);
     weatherContainerEl.classList.add("night");
+    spanEl.classList.add("night");
     // show dark image
   } else if (universalTime > sunrise) {
     bodyEl.setAttribute(
@@ -55,6 +58,7 @@ const displayBackground = async (cityName, unit) => {
       `background-image:url(${daySky});background-size:none`
     );
     weatherContainerEl.classList.remove("night");
+    spanEl.classList.remove("night");
   }
 };
 
@@ -65,4 +69,5 @@ const handleErrors = (singleFunction) => {
     });
   };
 };
+
 export { cloudValue, displayBackground };

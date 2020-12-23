@@ -34,12 +34,14 @@ searchCityEl.addEventListener("input", (e) => {
 searchCityEl.addEventListener("keypress", (e) => {
   if (e.charCode === 13 && cityString.trim() !== "") {
     renderWeather(cityString, "imperial");
+    searchCityEl.value = "";
   }
 });
 //when we click search icon, we call renderWeather with the value of cityString.
 searchIcon.addEventListener("click", (e) => {
   if (cityString.trim() !== "") {
     renderWeather(cityString, "imperial");
+    searchCityEl.value = "";
   }
 });
 const sam = moment.utc().add(43455).valueOf();
