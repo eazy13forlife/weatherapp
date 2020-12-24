@@ -18,6 +18,10 @@ ul {
   margin: 0px;
   padding: 0px;
 }
+body {
+  opacity: 0;
+  animation: opacity 500ms forwards;
+}
 /*time element*/
 #time {
   font-size: 1.3rem;
@@ -69,6 +73,10 @@ input::placeholder {
 /*end of search bar and header*/
 
 /*beginnning of weather container*/
+main {
+  opacity: 0;
+  animation: opacity 1000ms forwards;
+}
 div.weather-container {
   width: 50%;
   margin-left: 6em;
@@ -80,10 +88,6 @@ div.weather-container {
 }
 #name {
   font-size: 2.5rem;
-}
-main {
-  opacity: 0;
-  animation: opacity 1000ms forwards;
 }
 div.weather-details {
   display: flex;
