@@ -37362,6 +37362,34 @@ exports.geocoderKey = geocoderKey;
 
 /***/ }),
 
+/***/ "./source/filters.js":
+/*!***************************!*\
+  !*** ./source/filters.js ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var filters = {
+  celsiusCheck: false
+};
+
+var setFilters = function setFilters(object) {
+  if (typeof object.celsiusCheck === "boolean") {
+    filters.celsiusCheck = object.celsiusCheck;
+  }
+};
+
+exports.setFilters = setFilters;
+exports.filters = filters;
+
+/***/ }),
+
 /***/ "./source/helper-functions.js":
 /*!************************************!*\
   !*** ./source/helper-functions.js ***!
@@ -37459,7 +37487,7 @@ var cloudValue = function () {
   };
 }();
 
-//function that displays the body background we want based on sunset/sunsrise
+// function that displays the body background we want based on sunset/sunsrise
 var displayBackground = function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(cityName, unit) {
     var object, sunrise, sunset, universalTime;
@@ -37475,14 +37503,14 @@ var displayBackground = function () {
             sunrise = object.sunrise + object.timezone;
             sunset = object.sunset + object.timezone;
             universalTime = _moment2.default.utc().add(object.timezone).valueOf();
-            //if the time is less than the citys sunset time but greater than the citys sunrise time, show sun because the sun is still up.
+            //if the universaltime is greater than both sunset and sunrise,that means the sunset and sunrise time by the api have not been updated for the next day, so it is still night time.
 
             if (universalTime > sunrise && universalTime > sunset || universalTime < sunrise) {
               _views.bodyEl.setAttribute("style", "background-image:url(" + _clearnight2.default + ");background-size:130%,background-position:0, 20px;");
-              addClass("night", _views.timeEl, _views.weatherContainerEl, _views.spanEl);
+              addClass("night", _views.timeEl, _views.weatherContainerEl, _views.errorMessageEl);
             } else if (universalTime > sunrise) {
               _views.bodyEl.setAttribute("style", "background-image:url(" + _clearskies2.default + ");");
-              removeClass("night", _views.timeEl, _views.weatherContainerEl, _views.spanEl);
+              removeClass("night", _views.timeEl, _views.weatherContainerEl, _views.errorMessageEl);
             }
 
           case 7:
@@ -37498,29 +37526,7 @@ var displayBackground = function () {
   };
 }();
 
-//function to add a class to a list of elements
-var addClass = function addClass(className) {
-  for (var _len = arguments.length, elements = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    elements[_key - 1] = arguments[_key];
-  }
-
-  elements.forEach(function (element) {
-    element.classList.add(className);
-  });
-};
-
-//function to remove a class from a list of elements
-var removeClass = function removeClass(className) {
-  for (var _len2 = arguments.length, elements = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-    elements[_key2 - 1] = arguments[_key2];
-  }
-
-  elements.forEach(function (element) {
-    element.classList.remove(className);
-  });
-};
-
-//function get the current time for a city
+// function get the current time for a city
 var getTime = function () {
   var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(cityName, unit) {
     var object, time;
@@ -37549,6 +37555,28 @@ var getTime = function () {
   };
 }();
 
+// function to add a class to a list of elements
+var addClass = function addClass(className) {
+  for (var _len = arguments.length, elements = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    elements[_key - 1] = arguments[_key];
+  }
+
+  elements.forEach(function (element) {
+    element.classList.add(className);
+  });
+};
+
+// function to remove a class from a list of elements
+var removeClass = function removeClass(className) {
+  for (var _len2 = arguments.length, elements = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+    elements[_key2 - 1] = arguments[_key2];
+  }
+
+  elements.forEach(function (element) {
+    element.classList.remove(className);
+  });
+};
+
 exports.cloudValue = cloudValue;
 exports.displayBackground = displayBackground;
 exports.getTime = getTime;
@@ -37565,9 +37593,16 @@ exports.getTime = getTime;
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.onLoad = undefined;
+
 var _requests = __webpack_require__(/*! ./requests.js */ "./source/requests.js");
 
 var _views = __webpack_require__(/*! ./views.js */ "./source/views.js");
+
+var _filters = __webpack_require__(/*! ./filters.js */ "./source/filters.js");
 
 var _moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 
@@ -37630,6 +37665,12 @@ var onLoad = function () {
 
 onLoad("imperial");
 
+//when we click the checkbox for celsiusCheckbox
+_views.celsiusCheckbox.addEventListener("change", function (e) {
+  (0, _filters.setFilters)({ celsiusCheck: e.target.checked });
+  (0, _views.displayOnCheckbox)(e);
+});
+
 //when we press enter in search bar, we call renderWeather with the value of cityString.
 _views.searchCityEl.addEventListener("keypress", function (e) {
   if (e.charCode === 13) {
@@ -37639,6 +37680,8 @@ _views.searchCityEl.addEventListener("keypress", function (e) {
 
 //when we click search icon, we call renderWeather with the value of cityString.
 searchIcon.addEventListener("click", _views.searchEvent);
+
+exports.onLoad = onLoad;
 
 /***/ }),
 
@@ -37834,7 +37877,6 @@ var getCurrentCity = function () {
   };
 }();
 
-// const mike = moment().utc().valueOf();
 exports.getWeatherByCity = getWeatherByCity;
 exports.getCurrentCity = getCurrentCity;
 
@@ -37853,7 +37895,7 @@ exports.getCurrentCity = getCurrentCity;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.renderWeatherPageLoad = exports.searchEvent = exports.searchCityEl = exports.timeEl = exports.mainSelector = exports.spanEl = exports.weatherContainerEl = exports.detailsDiv = exports.renderWeather = exports.bodyEl = undefined;
+exports.displayOnCheckbox = exports.celsiusCheckbox = exports.renderWeatherPageLoad = exports.searchEvent = exports.searchCityEl = exports.timeEl = exports.mainSelector = exports.errorMessageEl = exports.weatherContainerEl = exports.detailsDiv = exports.renderWeather = exports.bodyEl = undefined;
 
 var _moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 
@@ -37861,12 +37903,17 @@ var _moment2 = _interopRequireDefault(_moment);
 
 var _requests = __webpack_require__(/*! ./requests.js */ "./source/requests.js");
 
+var _index = __webpack_require__(/*! ./index.js */ "./source/index.js");
+
+var _filters = __webpack_require__(/*! ./filters.js */ "./source/filters.js");
+
 var _helperFunctions = __webpack_require__(/*! ./helper-functions.js */ "./source/helper-functions.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
+var cityString = void 0;
 var cityNameEl = document.querySelector("#name");
 var cloudyEl = document.querySelector("#cloudy");
 var feelsLikeEl = document.querySelector("#feels_like");
@@ -37875,11 +37922,12 @@ var humidityEl = document.querySelector("#humidity");
 var bodyEl = document.querySelector("body");
 var weatherContainerEl = document.querySelector(".weather-container");
 var degrees = document.querySelector("#degrees");
-var spanEl = document.querySelector("span");
+var errorMessageEl = document.querySelector("#error_message");
 var detailsDiv = document.querySelector(".details");
 var mainSelector = document.querySelector("main");
 var timeEl = document.querySelector("#time");
 var searchCityEl = document.querySelector("#search_city");
+var celsiusCheckbox = document.querySelector("#celsius");
 
 //function that renders all the weather content to the screen. No errors are checked in this;
 var renderWeatherNoError = function () {
@@ -37890,31 +37938,31 @@ var renderWeatherNoError = function () {
         switch (_context.prev = _context.next) {
           case 0:
             elementsOnSuccess();
-            detailsDiv.classList.remove("remove-border");
-            _context.next = 4;
+            _context.next = 3;
             return (0, _helperFunctions.displayBackground)(cityName, unit);
 
-          case 4:
-            _context.next = 6;
+          case 3:
+            _context.next = 5;
             return (0, _requests.getWeatherByCity)(cityName, unit);
 
-          case 6:
+          case 5:
             object = _context.sent;
 
-            mainSelector.setAttribute("style", "animation:opacity 1000ms forwards");
+            mainSelector.setAttribute("style", "animation:opacity 800ms forwards");
             cityNameEl.textContent = object.city + ", " + object.state;
-            _context.next = 11;
+            _context.next = 10;
             return (0, _helperFunctions.cloudValue)(cityName, unit);
 
-          case 11:
+          case 10:
             cloudyEl.textContent = _context.sent;
-            _context.next = 14;
+            _context.next = 13;
             return (0, _helperFunctions.getTime)(cityName, unit);
 
-          case 14:
+          case 13:
             timeEl.textContent = _context.sent;
 
             //right after some text has shown on the screen but before the details div shows, remove the remove-border class so our border can show again.
+            detailsDiv.classList.remove("remove-border");
             if (unit === "imperial") {
               degrees.innerHTML = object.temp + "&#8457";
               feelsLikeEl.innerHTML = "Feels like: " + object.feels_like + "&#8457";
@@ -37939,19 +37987,22 @@ var renderWeatherNoError = function () {
   };
 }();
 
+// function that displays correct elements when there are  errors on the page
 var elementsOnError = function elementsOnError() {
   mainSelector.setAttribute("style", "animation:opacity 1000ms forwards");
   weatherContainerEl.setAttribute("style", "display:none");
-  spanEl.setAttribute("style", "display:block");
+  errorMessageEl.setAttribute("style", "display:block");
   timeEl.setAttribute("style", "display:none");
 };
 
+// function that displays correct elements when there are no errors on the page
 var elementsOnSuccess = function elementsOnSuccess() {
   timeEl.setAttribute("style", "display:block");
-  spanEl.setAttribute("style", "display:none");
+  errorMessageEl.setAttribute("style", "display:none");
   weatherContainerEl.setAttribute("style", "display:block");
 };
-//function to handle errors for our renderWeather on page load
+
+// function to handle errors for our renderWeather on page load
 var handleErrorsPageLoad = function handleErrorsPageLoad(singleFunction) {
   return function (cityName, unit) {
     return singleFunction(cityName, unit).catch(function (error) {
@@ -37959,7 +38010,8 @@ var handleErrorsPageLoad = function handleErrorsPageLoad(singleFunction) {
     });
   };
 };
-//function to handle errors for our general renderWeather function
+
+// function to handle errors for our general renderWeather function
 var handleErrors = function handleErrors(singleFunction) {
   return function (cityName, unit) {
     return singleFunction(cityName, unit).catch(function (error) {
@@ -37968,19 +38020,44 @@ var handleErrors = function handleErrors(singleFunction) {
   };
 };
 
-//our new general renderWeather function  after checking for errors
+// our new general renderWeather function  after checking for errors
 var renderWeather = handleErrors(renderWeatherNoError);
 
-//our new renderWeather function for page load after checking for errors
+// our new renderWeather function for page load after checking for errors
 var renderWeatherPageLoad = handleErrorsPageLoad(renderWeatherNoError);
 
-//function to run when using our click or enter event to search for city name
+// function to run when using our click or enter event to search for city name
 var searchEvent = function searchEvent(e) {
-  var cityString = searchCityEl.value;
+  cityString = searchCityEl.value;
   if (cityString.trim() !== "") {
-    renderWeather(cityString, "imperial");
+    // if checkmark is checked, run renderWeather using metric unit, otherwise using imperial
+    if (_filters.filters.celsiusCheck) {
+      renderWeather(cityString, "metric");
+    } else {
+      renderWeather(cityString, "imperial");
+    }
     searchCityEl.value = "";
+    // remove animation on our main tag, so renderWeather can add it back again when it is called
     mainSelector.setAttribute("style", "animation:none");
+  }
+};
+
+// function to run when clicking our checkbox
+var displayOnCheckbox = function displayOnCheckbox(e) {
+  // if there is no cityString value, meaning page just opened and we are getting the person's ip address to find the page, run onLoad function
+  if (!cityString) {
+    if (_filters.filters.celsiusCheck) {
+      (0, _index.onLoad)("metric");
+    } else {
+      (0, _index.onLoad)("imperial");
+    }
+  } else {
+    // otherwise, call renderWeather with the correct units.
+    if (_filters.filters.celsiusCheck) {
+      renderWeather(cityString, "metric");
+    } else {
+      renderWeather(cityString, "imperial");
+    }
   }
 };
 
@@ -37988,12 +38065,14 @@ exports.bodyEl = bodyEl;
 exports.renderWeather = renderWeather;
 exports.detailsDiv = detailsDiv;
 exports.weatherContainerEl = weatherContainerEl;
-exports.spanEl = spanEl;
+exports.errorMessageEl = errorMessageEl;
 exports.mainSelector = mainSelector;
 exports.timeEl = timeEl;
 exports.searchCityEl = searchCityEl;
 exports.searchEvent = searchEvent;
 exports.renderWeatherPageLoad = renderWeatherPageLoad;
+exports.celsiusCheckbox = celsiusCheckbox;
+exports.displayOnCheckbox = displayOnCheckbox;
 
 /***/ }),
 

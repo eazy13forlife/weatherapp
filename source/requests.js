@@ -71,5 +71,4 @@ const getCurrentCity = async () => {
   }
 };
 
-// const mike = moment().utc().valueOf();
 export { getWeatherByCity, getCurrentCity };

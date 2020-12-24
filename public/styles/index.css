@@ -20,7 +20,7 @@ ul {
 }
 body {
   opacity: 0;
-  animation: opacity 500ms forwards;
+  animation: opacity 400ms forwards;
 }
 /*time element*/
 #time {
@@ -39,7 +39,15 @@ header {
   padding-bottom: 2rem;
   position: relative;
 }
-
+#celsius {
+  color: white;
+  margin-top: 2.7rem;
+  margin-right: 2rem;
+  font-size: 1.5rem;
+}
+#celsius input {
+  transform: scale(1.5);
+}
 #search_city {
   margin-top: 2rem;
   margin-right: 4rem;
@@ -112,7 +120,7 @@ div.details.remove-border {
 div.details p {
   margin-bottom: 0.5em;
 }
-span {
+#error_message {
   margin-left: 6em;
   margin-top: 2em;
   display: none;
@@ -121,7 +129,7 @@ span {
 }
 
 div.weather-container.night,
-span.night {
+#error_message.night {
   color: white;
 }
 div.weather-container.night .details {

@@ -6,7 +6,10 @@ import {
   searchCityEl,
   searchEvent,
   renderWeatherPageLoad,
+  celsiusCheckbox,
+  displayOnCheckbox,
 } from "./views.js";
+import { setFilters, filters } from "./filters.js";
 import moment from "moment";
 /**
 clear at night is shining moon
@@ -33,6 +36,12 @@ const onLoad = async (unit) => {
 
 onLoad("imperial");
 
+//when we click the checkbox for celsiusCheckbox
+celsiusCheckbox.addEventListener("change", (e) => {
+  setFilters({ celsiusCheck: e.target.checked });
+  displayOnCheckbox(e);
+});
+
 //when we press enter in search bar, we call renderWeather with the value of cityString.
 searchCityEl.addEventListener("keypress", (e) => {
   if (e.charCode === 13) {
@@ -42,3 +51,5 @@ searchCityEl.addEventListener("keypress", (e) => {
 
 //when we click search icon, we call renderWeather with the value of cityString.
 searchIcon.addEventListener("click", searchEvent);
+
+export { onLoad };

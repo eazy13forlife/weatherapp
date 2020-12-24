@@ -13,6 +13,9 @@
   </head>
   <body>
     <header>
+      <span id="celsius"
+        ><input type="checkbox" name="unit" value="celsius" /> &#8451;</span
+      >
       <input
         type="text"
         name="search city"
@@ -23,7 +26,7 @@
     </header>
     <main>
       <p id="time"></p>
-      <span>City not found</span>
+      <span id="error_message">City not found</span>
       <div class="weather-container night">
         <div class="city-state">
           <h1 id="name"></h1>
