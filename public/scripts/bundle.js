@@ -37503,7 +37503,7 @@ var displayBackground = function () {
             sunrise = object.sunrise + object.timezone;
             sunset = object.sunset + object.timezone;
             universalTime = _moment2.default.utc().add(object.timezone).valueOf();
-            //if the universaltime is greater than both sunset and sunrise,that means the sunset and sunrise time by the api have not been updated for the next day, so it is still night time.
+            //if the universaltime is greater than both sunset and sunrise,that means the sunset and sunrise time by the api have not been updated for the next day, so it is still night time. otherwise, if time is less than sunrise, it is night time. If greater than sunrise, it is day time.
 
             if (universalTime > sunrise && universalTime > sunset || universalTime < sunrise) {
               _views.bodyEl.setAttribute("style", "background-image:url(" + _clearnight2.default + ");background-size:130%,background-position:0, 20px;");
