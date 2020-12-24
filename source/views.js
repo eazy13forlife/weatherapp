@@ -20,7 +20,7 @@ const searchCityEl = document.querySelector("#search_city");
 const renderWeatherNoError = async (cityName, unit) => {
   spanEl.setAttribute("style", "display:none");
   weatherContainerEl.setAttribute("style", "display:block");
-  displayBackground(cityName, unit);
+  await displayBackground(cityName, unit);
   const object = await getWeatherByCity(cityName, unit);
   mainSelector.setAttribute("style", "animation:opacity 1000ms forwards");
   cityNameEl.textContent = `${object.city}, ${object.state}`;
@@ -44,7 +44,7 @@ const renderWeatherNoError = async (cityName, unit) => {
 const handleErrorsPageLoad = (singleFunction) => {
   return (cityName, unit) => {
     return singleFunction(cityName, unit).catch((error) => {
-      console.log("mike");
+      singleFunction("Los Angeles", unit);
     });
   };
 };

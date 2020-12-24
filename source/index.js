@@ -23,8 +23,12 @@ const searchIcon = document.querySelector("#search_icon");
 
 //on page load, call onLoad
 const onLoad = async (unit) => {
-  const city = await getCurrentCity();
-  renderWeatherPageLoad(city, unit);
+  try {
+    const city = await getCurrentCity();
+    renderWeatherPageLoad(city, unit);
+  } catch (e) {
+    renderWeather("Los Angeles", unit);
+  }
 };
 
 onLoad("imperial");

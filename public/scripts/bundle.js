@@ -37598,20 +37598,29 @@ var onLoad = function () {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _context.next = 2;
+            _context.prev = 0;
+            _context.next = 3;
             return (0, _requests.getCurrentCity)();
 
-          case 2:
+          case 3:
             city = _context.sent;
 
             (0, _views.renderWeatherPageLoad)(city, unit);
+            _context.next = 10;
+            break;
 
-          case 4:
+          case 7:
+            _context.prev = 7;
+            _context.t0 = _context["catch"](0);
+
+            (0, _views.renderWeather)("Los Angeles", unit);
+
+          case 10:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, undefined);
+    }, _callee, undefined, [[0, 7]]);
   }));
 
   return function onLoad(_x) {
@@ -37882,24 +37891,27 @@ var renderWeatherNoError = function () {
           case 0:
             spanEl.setAttribute("style", "display:none");
             weatherContainerEl.setAttribute("style", "display:block");
-            (0, _helperFunctions.displayBackground)(cityName, unit);
-            _context.next = 5;
+            _context.next = 4;
+            return (0, _helperFunctions.displayBackground)(cityName, unit);
+
+          case 4:
+            _context.next = 6;
             return (0, _requests.getWeatherByCity)(cityName, unit);
 
-          case 5:
+          case 6:
             object = _context.sent;
 
             mainSelector.setAttribute("style", "animation:opacity 1000ms forwards");
             cityNameEl.textContent = object.city + ", " + object.state;
-            _context.next = 10;
+            _context.next = 11;
             return (0, _helperFunctions.cloudValue)(cityName, unit);
 
-          case 10:
+          case 11:
             cloudyEl.textContent = _context.sent;
-            _context.next = 13;
+            _context.next = 14;
             return (0, _helperFunctions.getTime)(cityName, unit);
 
-          case 13:
+          case 14:
             timeEl.textContent = _context.sent;
 
             //right after some text has shown on the screen but before the details div shows, remove the remove-border class so our border can show again.
@@ -37915,7 +37927,7 @@ var renderWeatherNoError = function () {
             }
             humidityEl.textContent = "Humidity: " + object.humidity + "%";
 
-          case 17:
+          case 18:
           case "end":
             return _context.stop();
         }
@@ -37932,7 +37944,7 @@ var renderWeatherNoError = function () {
 var handleErrorsPageLoad = function handleErrorsPageLoad(singleFunction) {
   return function (cityName, unit) {
     return singleFunction(cityName, unit).catch(function (error) {
-      console.log("mike");
+      singleFunction("Los Angeles", unit);
     });
   };
 };
