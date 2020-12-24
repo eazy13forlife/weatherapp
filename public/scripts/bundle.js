@@ -37477,10 +37477,9 @@ var displayBackground = function () {
             universalTime = _moment2.default.utc().add(object.timezone).valueOf();
             //if the time is less than the citys sunset time but greater than the citys sunrise time, show sun because the sun is still up.
 
-            if (universalTime <= sunrise) {
+            if (universalTime > sunrise && universalTime > sunset || universalTime < sunrise) {
               _views.bodyEl.setAttribute("style", "background-image:url(" + _clearnight2.default + ");background-size:130%,background-position:0, 20px;");
               addClass("night", _views.timeEl, _views.weatherContainerEl, _views.spanEl);
-              // show dark image
             } else if (universalTime > sunrise) {
               _views.bodyEl.setAttribute("style", "background-image:url(" + _clearskies2.default + ");");
               removeClass("night", _views.timeEl, _views.weatherContainerEl, _views.spanEl);
@@ -37520,7 +37519,8 @@ var removeClass = function removeClass(className) {
     element.classList.remove(className);
   });
 };
-//get the current time for our city
+
+//function get the current time for a city
 var getTime = function () {
   var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(cityName, unit) {
     var object, time;
@@ -37889,8 +37889,8 @@ var renderWeatherNoError = function () {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            spanEl.setAttribute("style", "display:none");
-            weatherContainerEl.setAttribute("style", "display:block");
+            elementsOnSuccess();
+            detailsDiv.classList.remove("remove-border");
             _context.next = 4;
             return (0, _helperFunctions.displayBackground)(cityName, unit);
 
@@ -37915,7 +37915,6 @@ var renderWeatherNoError = function () {
             timeEl.textContent = _context.sent;
 
             //right after some text has shown on the screen but before the details div shows, remove the remove-border class so our border can show again.
-            detailsDiv.classList.remove("remove-border");
             if (unit === "imperial") {
               degrees.innerHTML = object.temp + "&#8457";
               feelsLikeEl.innerHTML = "Feels like: " + object.feels_like + "&#8457";
@@ -37927,7 +37926,7 @@ var renderWeatherNoError = function () {
             }
             humidityEl.textContent = "Humidity: " + object.humidity + "%";
 
-          case 18:
+          case 17:
           case "end":
             return _context.stop();
         }
@@ -37940,6 +37939,18 @@ var renderWeatherNoError = function () {
   };
 }();
 
+var elementsOnError = function elementsOnError() {
+  mainSelector.setAttribute("style", "animation:opacity 1000ms forwards");
+  weatherContainerEl.setAttribute("style", "display:none");
+  spanEl.setAttribute("style", "display:block");
+  timeEl.setAttribute("style", "display:none");
+};
+
+var elementsOnSuccess = function elementsOnSuccess() {
+  timeEl.setAttribute("style", "display:block");
+  spanEl.setAttribute("style", "display:none");
+  weatherContainerEl.setAttribute("style", "display:block");
+};
 //function to handle errors for our renderWeather on page load
 var handleErrorsPageLoad = function handleErrorsPageLoad(singleFunction) {
   return function (cityName, unit) {
@@ -37952,9 +37963,7 @@ var handleErrorsPageLoad = function handleErrorsPageLoad(singleFunction) {
 var handleErrors = function handleErrors(singleFunction) {
   return function (cityName, unit) {
     return singleFunction(cityName, unit).catch(function (error) {
-      mainSelector.setAttribute("style", "animation:opacity 1000ms forwards");
-      weatherContainerEl.setAttribute("style", "display:none");
-      spanEl.setAttribute("style", "display:block");
+      elementsOnError();
     });
   };
 };

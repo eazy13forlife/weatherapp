@@ -82,6 +82,7 @@ div.weather-container {
   font-size: 2.5rem;
 }
 main {
+  opacity: 0;
   animation: opacity 1000ms forwards;
 }
 div.weather-details {
@@ -112,6 +113,7 @@ span {
   margin-top: 2em;
   display: none;
   font-size: 2.3rem;
+  color: white;
 }
 
 div.weather-container.night,
@@ -120,6 +122,20 @@ span.night {
 }
 div.weather-container.night .details {
   border-color: white;
+}
+body {
+  position: relative;
+}
+body::after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: blue;
+  opacity: 0.15;
+  z-index: -4;
 }
 
 @keyframes opacity {

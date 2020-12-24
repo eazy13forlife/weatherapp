@@ -28,13 +28,15 @@ const displayBackground = async (cityName, unit) => {
   const sunset = object.sunset + object.timezone;
   const universalTime = moment.utc().add(object.timezone).valueOf();
   //if the time is less than the citys sunset time but greater than the citys sunrise time, show sun because the sun is still up.
-  if (universalTime <= sunrise) {
+  if (
+    (universalTime > sunrise && universalTime > sunset) ||
+    universalTime < sunrise
+  ) {
     bodyEl.setAttribute(
       "style",
       `background-image:url(${nightSky});background-size:130%,background-position:0, 20px;`
     );
     addClass("night", timeEl, weatherContainerEl, spanEl);
-    // show dark image
   } else if (universalTime > sunrise) {
     bodyEl.setAttribute("style", `background-image:url(${daySky});`);
     removeClass("night", timeEl, weatherContainerEl, spanEl);
@@ -54,7 +56,8 @@ const removeClass = (className, ...elements) => {
     element.classList.remove(className);
   });
 };
-//get the current time for our city
+
+//function get the current time for a city
 const getTime = async (cityName, unit) => {
   const object = await getWeatherByCity(cityName, unit);
   const time = moment.utc().add(object.timezone).format("MMM Do, h:mm a");

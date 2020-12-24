@@ -18,8 +18,8 @@ const searchCityEl = document.querySelector("#search_city");
 
 //function that renders all the weather content to the screen. No errors are checked in this;
 const renderWeatherNoError = async (cityName, unit) => {
-  spanEl.setAttribute("style", "display:none");
-  weatherContainerEl.setAttribute("style", "display:block");
+  elementsOnSuccess();
+  detailsDiv.classList.remove("remove-border");
   await displayBackground(cityName, unit);
   const object = await getWeatherByCity(cityName, unit);
   mainSelector.setAttribute("style", "animation:opacity 1000ms forwards");
@@ -27,7 +27,6 @@ const renderWeatherNoError = async (cityName, unit) => {
   cloudyEl.textContent = await cloudValue(cityName, unit);
   timeEl.textContent = await getTime(cityName, unit);
   //right after some text has shown on the screen but before the details div shows, remove the remove-border class so our border can show again.
-  detailsDiv.classList.remove("remove-border");
   if (unit === "imperial") {
     degrees.innerHTML = `${object.temp}&#8457`;
     feelsLikeEl.innerHTML = `Feels like: ${object.feels_like}&#8457`;
@@ -40,6 +39,18 @@ const renderWeatherNoError = async (cityName, unit) => {
   humidityEl.textContent = `Humidity: ${object.humidity}%`;
 };
 
+const elementsOnError = () => {
+  mainSelector.setAttribute("style", "animation:opacity 1000ms forwards");
+  weatherContainerEl.setAttribute("style", "display:none");
+  spanEl.setAttribute("style", "display:block");
+  timeEl.setAttribute("style", "display:none");
+};
+
+const elementsOnSuccess = () => {
+  timeEl.setAttribute("style", "display:block");
+  spanEl.setAttribute("style", "display:none");
+  weatherContainerEl.setAttribute("style", "display:block");
+};
 //function to handle errors for our renderWeather on page load
 const handleErrorsPageLoad = (singleFunction) => {
   return (cityName, unit) => {
@@ -52,9 +63,7 @@ const handleErrorsPageLoad = (singleFunction) => {
 const handleErrors = (singleFunction) => {
   return (cityName, unit) => {
     return singleFunction(cityName, unit).catch((error) => {
-      mainSelector.setAttribute("style", "animation:opacity 1000ms forwards");
-      weatherContainerEl.setAttribute("style", "display:none");
-      spanEl.setAttribute("style", "display:block");
+      elementsOnError();
     });
   };
 };
