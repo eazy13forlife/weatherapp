@@ -29,9 +29,9 @@ const renderWeatherNoError = async (cityName, unit) => {
   cityNameEl.textContent = `${object.city}, ${object.state}`;
   cloudyEl.textContent = await cloudValue(cityName, unit);
   timeEl.textContent = await getTime(cityName, unit);
-  setInterval(async () => {
-    timeEl.textContent = await getTime(cityName, unit);
-  }, 6000);
+  //setInterval(async () => {
+  //timeEl.textContent = await getTime(cityName, unit);
+  //}, 6000);
   //right after some text has shown on the screen but before the details div shows, remove the remove-border class so our border can show again.
   detailsDiv.classList.remove("remove-border");
   if (unit === "imperial") {
