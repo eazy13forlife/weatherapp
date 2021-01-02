@@ -37931,36 +37931,54 @@ var celsiusCheckbox = document.querySelector("#celsius");
 
 //function that renders all the weather content to the screen. No errors are checked in this;
 var renderWeatherNoError = function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(cityName, unit) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(cityName, unit) {
     var object;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
-        switch (_context.prev = _context.next) {
+        switch (_context2.prev = _context2.next) {
           case 0:
             elementsOnSuccess();
-            _context.next = 3;
+            _context2.next = 3;
             return (0, _helperFunctions.displayBackground)(cityName, unit);
 
           case 3:
-            _context.next = 5;
+            _context2.next = 5;
             return (0, _requests.getWeatherByCity)(cityName, unit);
 
           case 5:
-            object = _context.sent;
+            object = _context2.sent;
 
             mainSelector.setAttribute("style", "animation:opacity 800ms forwards");
             cityNameEl.textContent = object.city + ", " + object.state;
-            _context.next = 10;
+            _context2.next = 10;
             return (0, _helperFunctions.cloudValue)(cityName, unit);
 
           case 10:
-            cloudyEl.textContent = _context.sent;
-            _context.next = 13;
+            cloudyEl.textContent = _context2.sent;
+            _context2.next = 13;
             return (0, _helperFunctions.getTime)(cityName, unit);
 
           case 13:
-            timeEl.textContent = _context.sent;
+            timeEl.textContent = _context2.sent;
 
+            setInterval(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+              return regeneratorRuntime.wrap(function _callee$(_context) {
+                while (1) {
+                  switch (_context.prev = _context.next) {
+                    case 0:
+                      _context.next = 2;
+                      return (0, _helperFunctions.getTime)(cityName, unit);
+
+                    case 2:
+                      timeEl.textContent = _context.sent;
+
+                    case 3:
+                    case "end":
+                      return _context.stop();
+                  }
+                }
+              }, _callee, undefined);
+            })), 6000);
             //right after some text has shown on the screen but before the details div shows, remove the remove-border class so our border can show again.
             detailsDiv.classList.remove("remove-border");
             if (unit === "imperial") {
@@ -37974,12 +37992,12 @@ var renderWeatherNoError = function () {
             }
             humidityEl.textContent = "Humidity: " + object.humidity + "%";
 
-          case 17:
+          case 18:
           case "end":
-            return _context.stop();
+            return _context2.stop();
         }
       }
-    }, _callee, undefined);
+    }, _callee2, undefined);
   }));
 
   return function renderWeatherNoError(_x, _x2) {
